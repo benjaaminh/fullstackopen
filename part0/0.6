@@ -1,1 +1,12 @@
-
+sequenceDiagram
+    participant browser
+    participant server
+    
+    browser->>server: POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa {
+    "content": "hello",
+    "date": "2023-03-11T17:26:24.176Z"
+}
+    activate server
+    server-->>browser: [{ "content": "blabla", "date": "2023-11-03" },]
+    deactivate server
+    
