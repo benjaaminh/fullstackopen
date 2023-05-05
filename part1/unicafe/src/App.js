@@ -34,12 +34,12 @@ const handleBadClick = () => {
       <Button handleClick={handleNeutralClick} text='neutral' />
       <Button handleClick={handleBadClick} text='bad' />
       <h1>statistics</h1>
-      <Statistics number={good} text='good'/>
-      <Statistics number={neutral} text='neutral'/>
-      <Statistics number={bad} text='bad'/>
-      <Statistics number={total} text='total'/>
-      <Statistics number={average/total} text='average'/>
-      <Statistics number={good/total*100} text='positive' symbol='%'/>
+      <Statistics valuegood={good} textgood='good'
+      valueneutral={neutral} textneutral='neutral'
+      valuebad={bad} textbad='bad'
+      valuetotal={total} texttotal='total'
+      valueaverage={average/total} textaverage='average'
+      valuepositive={good/total*100} textpositive='positive' symbol='%' />
     </div>
   )
 }
@@ -50,7 +50,39 @@ const Button = ({ handleClick, text }) => (
       {text}  
 </button>)
 
-const Statistics = ({number, text, symbol}) => <p>{text} {number} {symbol}</p> 
+const Statistics = (props) => { if (props.number4===0)
+  {return (<div>No feedback given</div>)}
+  return(
+ <table>
+  <tbody>
+  <tr>
+    <td><StatisticLine text={props.textgood}/></td>
+    <td><StatisticLine value={props.valuegood}/></td>
+  </tr>
+<tr> 
+  <td><StatisticLine text={props.textneutral}/></td>
+  <td><StatisticLine value={props.valueneutral}/></td>
+</tr>
+<tr> 
+  <td><StatisticLine text={props.textbad}/></td>
+  <td><StatisticLine value={props.valuebad}/></td>
+</tr>
+<tr> 
+  <td><StatisticLine text={props.texttotal}/></td>
+  <td><StatisticLine value={props.valuetotal}/></td>
+</tr>
+<tr> 
+  <td><StatisticLine text={props.textaverage}/></td>
+  <td><StatisticLine value={props.valueaverage}/></td>
+</tr>
+<tr> 
+  <td><StatisticLine text={props.textpositive}/></td>
+  <td><StatisticLine value={props.valuepositive} symbol={props.symbol}/></td>
+</tr>
+</tbody>
+ </table>)
+}
+const StatisticLine = ({value,text,symbol}) => <div>{text} {value} {symbol}</div>
 
 
 export default App
