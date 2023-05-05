@@ -1,4 +1,9 @@
 import { useState } from 'react'
+
+//TODO: 
+//state is sometimes weird, has to click twice to update state
+//make names of objects instead of using Math.max...
+
 const App = () => {
   const anecdotes = [
     'If it hurts, do it more often.',
@@ -27,21 +32,25 @@ const App = () => {
 
  const handleVoteClick = () => {
   setVotes(copy1[0][selected]+=1)
+ // copy1[0][selected]+=1
+ console.log(Math.max(...copy1[0]))
+ //console.log(copy1[0])
   }
-
 
   
 
   return (
     <div>
-      <p>{anecdotes[selected]}</p>
-      <p>has {copy1[0][selected]} votes</p>
+      <h1>Anecdote of the day</h1>
+      <div>{anecdotes[selected]}</div>
+      <div>has {copy1[0][selected]} votes</div>
       <Button handleClick={handleVoteClick} text='vote'  />
       <Button handleClick={handleNextClick} text='next anecdote'/>
+    <h1>Anecdote with most votes</h1>
+    <p>{anecdotes[copy1[0].indexOf(Math.max(...copy1[0]))]}</p>
     </div>
   )
 }
-
 const Button = ({ handleClick, text }) => (  
   
   <button onClick={handleClick}>
