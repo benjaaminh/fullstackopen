@@ -11,13 +11,42 @@ const App = () => {
     'The only way to go fast, is to go well.'
   ]
    
-  const [selected, setSelected] = useState(0)
+  const handleNextClick = () => {
+    setSelected(Math.floor(Math.random()*anecdotes.length))
+  }
+
+ 
+ const [selected, setSelected] = useState(0)
+
+ const copy = useState(new Array(anecdotes.length+1).join('0').split('').map(parseFloat))
+
+ const [votes, setVotes] = useState(0)
+
+ const copy1=[...copy] 
+
+
+ const handleVoteClick = () => {
+  setVotes(copy1[0][selected]+=1)
+  }
+
+
+  
 
   return (
     <div>
-      {anecdotes[selected]}
+      <p>{anecdotes[selected]}</p>
+      <p>has {copy1[0][selected]} votes</p>
+      <Button handleClick={handleVoteClick} text='vote'  />
+      <Button handleClick={handleNextClick} text='next anecdote'/>
     </div>
   )
 }
+
+const Button = ({ handleClick, text }) => (  
+  
+  <button onClick={handleClick}>
+        {text}  
+  </button>
+  )
 
 export default App
