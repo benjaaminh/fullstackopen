@@ -15,47 +15,42 @@ const App = () => {
     'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients.',
     'The only way to go fast, is to go well.'
   ]
-   
+
   const handleNextClick = () => {
-    setSelected(Math.floor(Math.random()*anecdotes.length))
+    setSelected(Math.floor(Math.random() * anecdotes.length))
   }
 
- 
- const [selected, setSelected] = useState(0)
 
- const copy = useState(new Array(anecdotes.length+1).join('0').split('').map(parseFloat))
+  const [selected, setSelected] = useState(0)
 
- const [votes, setVotes] = useState(0)
+  const [votes, setVotes] = useState(new Array(anecdotes.length).fill(0))
 
- const copy1=[...copy] 
+  const maxNumber = Math.max(...votes)
 
-
- const handleVoteClick = () => {
-  setVotes(copy1[0][selected]+=1)
- // copy1[0][selected]+=1
- console.log(Math.max(...copy1[0]))
- //console.log(copy1[0])
+  const handleVoteClick = () => {
+    const copy = [...votes]
+    copy[selected] += 1
+    setVotes(copy)
   }
 
-  
 
   return (
     <div>
       <h1>Anecdote of the day</h1>
       <div>{anecdotes[selected]}</div>
-      <div>has {copy1[0][selected]} votes</div>
-      <Button handleClick={handleVoteClick} text='vote'  />
-      <Button handleClick={handleNextClick} text='next anecdote'/>
-    <h1>Anecdote with most votes</h1>
-    <p>{anecdotes[copy1[0].indexOf(Math.max(...copy1[0]))]}</p>
+      <div>has {votes[selected]} votes</div>
+      <Button handleClick={handleVoteClick} text='vote' />
+      <Button handleClick={handleNextClick} text='next anecdote' />
+      <h1>Anecdote with most votes</h1>
+      <p>{anecdotes[votes.indexOf(maxNumber)]}</p>
     </div>
   )
 }
-const Button = ({ handleClick, text }) => (  
-  
+const Button = ({ handleClick, text }) => (
+
   <button onClick={handleClick}>
-        {text}  
+    {text}
   </button>
-  )
+)
 
 export default App
