@@ -32,12 +32,10 @@ const Header = (props) => {
   )
   }
   
-  const Content = (props) => {
+  const Content = ({parts}) => {
     return (
       <div>
-       <Part name={props.parts[0].name} number={props.parts[0].exercises}/>
-      <Part name={props.parts[1].name} number={props.parts[1].exercises}/>
-      <Part name={props.parts[2].name} number={props.parts[2].exercises}/>
+      {parts.map(part=><Part key={part.id} name={part.name} exercises={part.exercises}/>)}
       </div>
     )
     }
@@ -45,7 +43,7 @@ const Header = (props) => {
     const Part = (props) => {
       return (
         <div>
-          <p>{props.name} {props.number}</p>
+          <p>{props.name} {props.exercises}</p>
         </div>
       )
       }
