@@ -17,6 +17,11 @@ const App = () => {
         name: 'State of a component',
         exercises: 14,
         id: 3
+      },
+      {
+        name:'Redux',
+        exercises: 11,
+        id: 4
       }
     ]
   }
@@ -24,10 +29,10 @@ const App = () => {
   return <Course course={course} />
 }
 
-const Header = (props) => {
+const Header = ({coursename}) => {
   return (
     <div>
-      <h1>{props.course}</h1>
+      <h1>{coursename}</h1>
     </div>
   )
   }
@@ -40,19 +45,22 @@ const Header = (props) => {
     )
     }
   
-    const Part = (props) => {
+    const Part = ({name, exercises}) => {
       return (
         <div>
-          <p>{props.name} {props.exercises}</p>
+          <p>{name} {exercises}</p>
         </div>
       )
       }
   
+ 
   
-  const Total = (props) => {
+  const Total = ({parts}) => {
     return (
+      
       <div>
-      <p>Number of exercises {props.parts[0].exercises+props.parts[1].exercises+props.parts[2].exercises}</p>
+      <b>total of {parts.reduce((accumulator, currentValue) =>
+       accumulator+currentValue.exercises,0)} exercises</b>
       </div>
     )
     }
@@ -60,8 +68,9 @@ const Header = (props) => {
 
 const Course= ({course}) => {
   return( <div>
-    <Header course={course.name}/>
+    <Header coursename={course.name}/>
     <Content parts={course.parts} />
+    <Total parts={course.parts}/>
   </div>)}
 
 export default App
