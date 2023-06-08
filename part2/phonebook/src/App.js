@@ -1,22 +1,33 @@
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 
+//TODO: fix filtering/persons. filteredlist is rendered but filtering doesnt work if persons is rendered. 
+
+
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-123456', id: 1 },
-    { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
-    { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
-    { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
-  ])
+  const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   //const [showAll, setShowAll]=useState(true)
   const [filteredList,setFilteredList]= useState(persons)
 
 
+  const hook = () => {
+    console.log('effect')
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+        console.log('promise fulfilled')
+        setPersons(response.data)
+        setFilteredList(response.data)
+      })
+  }
+  
+  useEffect(hook,[])
 
   const handleFilterChange=(event)=>{
       const query=event.target.value
@@ -27,6 +38,7 @@ const App = () => {
        person.name.toLowerCase().indexOf(query.toLowerCase())!== -1) //checks index of characters from input appearing in names, if larger than -1, they appear in the name
   
       setFilteredList(updatedList)
+   //   setPersons(updatedList)
     }
 
 
@@ -36,9 +48,10 @@ const App = () => {
       name: newName,
       number: newNumber
     }
-    if (persons.filter(person => person.name === newName).length > 0) {
+    if (filteredList.filter(person => person.name === newName).length > 0) {
       alert(`${newName} is already added to phonebook`)
     } else {
+      setFilteredList(filteredList.concat(NameObject))
       setPersons(persons.concat(NameObject))
       setNewName('')
       setNewNumber('')
@@ -68,7 +81,7 @@ const App = () => {
       newNumber={newNumber}/>
 
       <h2>Numbers</h2>
-      <Persons persons={persons}/>
+      <Persons filteredList={filteredList}/>
 
     </div>
   )
