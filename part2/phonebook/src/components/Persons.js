@@ -1,7 +1,9 @@
-const Persons = ({filteredList}) => {
+const Persons = ({filteredList, toggleDelete}) => {
     return (
         <div>
-        {filteredList.map((person) => <div key={person.name}>{person.name} {person.number}</div>)}
+        {filteredList.map((person) => <div key={person.id}>{person.name} {person.number}
+        <button onClick={toggleDelete}> delete </button>
+        </div>)}
       </div>
     )
 }

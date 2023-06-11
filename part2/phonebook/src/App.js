@@ -4,6 +4,7 @@ import axios from 'axios'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
+import personService from './services/persons'
 
 //TODO: fix filtering/persons. filteredlist is rendered but filtering doesnt work if persons is rendered. 
 
@@ -18,12 +19,12 @@ const App = () => {
 
   const hook = () => {
     console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
+    personService
+      .getAll()
+      .then(initialPersons => {
         console.log('promise fulfilled')
-        setPersons(response.data)
-        setFilteredList(response.data)
+        setPersons(initialPersons)
+        setFilteredList(initialPersons)
       })
   }
   
@@ -51,11 +52,24 @@ const App = () => {
     if (filteredList.filter(person => person.name === newName).length > 0) {
       alert(`${newName} is already added to phonebook`)
     } else {
-      setFilteredList(filteredList.concat(NameObject))
-      setPersons(persons.concat(NameObject))
+      personService
+      .create(NameObject)
+      .then(response => {
+      setFilteredList(filteredList.concat(response.data))
+      setPersons(persons.concat(response.data))
       setNewName('')
       setNewNumber('')
-    }
+    })}
+  }
+
+  const deletePerson = (id) => {
+    //event.preventDefault()
+    const person = persons.find(n => n.id === id)
+if (window.confirm("do you want to delet")){
+  personService
+  .deleteItem(id)
+  .then(setPersons(persons.filter(n => n.id !== id)))
+}
   }
 
 
@@ -81,7 +95,8 @@ const App = () => {
       newNumber={newNumber}/>
 
       <h2>Numbers</h2>
-      <Persons filteredList={filteredList}/>
+      <Persons filteredList={filteredList}
+      toggleDelete={deletePerson}/>
 
     </div>
   )
