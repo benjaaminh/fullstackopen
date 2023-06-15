@@ -3,8 +3,9 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
-import Persons from './components/Persons'
+import Person from './components/Person'
 import personService from './services/persons'
+import Notification from './components/Notification'
 
 //TODO: fix filtering/persons. filteredlist is rendered but filtering doesnt work if persons is rendered. 
 
@@ -15,7 +16,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   //const [showAll, setShowAll]=useState(true)
   const [filteredList,setFilteredList]= useState(persons)
-
+  const [notificationMessage, setNotificationMessage] = useState(null)
 
   const hook = () => {
     console.log('effect')
@@ -47,30 +48,63 @@ const App = () => {
     event.preventDefault()
     const NameObject = {
       name: newName,
-      number: newNumber
+      number: newNumber,
     }
     if (filteredList.filter(person => person.name === newName).length > 0) {
-      alert(`${newName} is already added to phonebook`)
+      if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)){
+        const person = persons.find(n => n.name === newName)
+        personService.update(person.id, NameObject)
+        .then(returnedPerson => { 
+          setFilteredList(filteredList.map(person => person.name !== newName ? person : returnedPerson))
+          setPersons(persons.map(person => person.name !== newName ? person : returnedPerson))
+        })
+        .catch(error => {
+          setNotificationMessage(`Information of ${person.name} has already been removed from server`)
+setTimeout(()=>{
+  setNotificationMessage(null)
+
+ },5000)
+          
+        })
+        setNotificationMessage(`${person.name}'s number was changed`)
+setTimeout(()=>{
+  setNotificationMessage(null)
+
+ },5000)
+
+        
+      }
+
     } else {
       personService
       .create(NameObject)
-      .then(response => {
-      setFilteredList(filteredList.concat(response.data))
-      setPersons(persons.concat(response.data))
+      .then(newPerson => {
+      setFilteredList(filteredList.concat(newPerson))
+      setPersons(persons.concat(newPerson))
       setNewName('')
       setNewNumber('')
+      setNotificationMessage(`the person '${newName}' was added`)
+setTimeout(()=>{
+  setNotificationMessage(null)
+
+ },5000)
     })}
+
+    
   }
 
   const deletePerson = (id) => {
-    //event.preventDefault()
+   // event.preventDefault()
     const person = persons.find(n => n.id === id)
-if (window.confirm("do you want to delet")){
+if (window.confirm(`do you want to delete '${person.name}'?` )){
   personService
   .deleteItem(id)
   .then(setPersons(persons.filter(n => n.id !== id)))
+  .then(setFilteredList(persons.filter(n => n.id !== id)))
 }
   }
+
+
 
 
   const handleNameChange = (event) => {
@@ -86,6 +120,7 @@ if (window.confirm("do you want to delet")){
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notificationMessage}/>
       <Filter handleFilterChange={handleFilterChange}/>
       <h2>add a new</h2>
       <PersonForm handleNameChange={handleNameChange}
@@ -95,12 +130,14 @@ if (window.confirm("do you want to delet")){
       newNumber={newNumber}/>
 
       <h2>Numbers</h2>
-      <Persons filteredList={filteredList}
-      toggleDelete={deletePerson}/>
-
-    </div>
+      <div>
+        {filteredList.map(person =>
+          <Person key={person.id} person={person} toggleDelete={() => deletePerson(person.id)} />
+          )}
+      </div>
+  </div>
   )
-}
+        }
 
 
 export default App
