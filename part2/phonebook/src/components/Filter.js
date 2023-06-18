@@ -1,5 +1,5 @@
-const Filter = ({handleFilterChange}) => {
-    return( <div>filter shown with <input id=""
+const Filter = ({handleFilterChange, filter}) => {
+    return( <div>filter shown with <input value={filter}
     onChange={handleFilterChange}
     type="search"/></div>)
 }
