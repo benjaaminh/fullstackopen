@@ -1,9 +1,5 @@
 import { useState } from 'react'
 
-//TODO: 
-//state is sometimes weird, has to click twice to update state
-//make names of objects instead of using Math.max...
-
 const App = () => {
   const anecdotes = [
     'If it hurts, do it more often.',
@@ -17,13 +13,14 @@ const App = () => {
   ]
 
   const handleNextClick = () => {
-    setSelected(Math.floor(Math.random() * anecdotes.length))
+    const select=(Math.floor(Math.random() * anecdotes.length))
+    setSelected(select)
   }
 
 
   const [selected, setSelected] = useState(0)
 
-  const [votes, setVotes] = useState(new Array(anecdotes.length).fill(0))
+  const [votes, setVotes] = useState(Array(anecdotes.length).fill(0))
 
   const maxNumber = Math.max(...votes)
 
