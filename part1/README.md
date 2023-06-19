@@ -1,0 +1,1 @@
+exercises for part1 of fullstackopen course
