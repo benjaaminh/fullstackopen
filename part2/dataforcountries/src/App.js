@@ -18,8 +18,6 @@ const App = () => {
       .get(`https://studies.cs.helsinki.fi/restcountries/api/all`)
       .then(response => {
         setAllCountries(response.data)
-
-
       })
   }, [])
 
@@ -34,7 +32,6 @@ const App = () => {
       country.name.common.toLowerCase().indexOf(query.toLowerCase()) !== -1) //checks index of characters from input appearing in names, if larger than -1, they appear in the name
 
     setCountries(updatedList)
-    //   setPersons(updatedList)
   }
 
 
