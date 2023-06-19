@@ -33,7 +33,6 @@ const Total = (props) => {
   )
   }
 
-//TEST
 const App = () => {
   const course = {
     name: 'Half Stack application development',
