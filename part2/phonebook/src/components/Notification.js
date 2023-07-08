@@ -21,7 +21,7 @@ const Notification = ({ message }) => {
     if (message === null) {
       return null
     }
-    else if (message.includes('Information')){
+    else if (message.toLowerCase().includes('fail')){
       return (
         <div style={errorStyle}>
           {message}
