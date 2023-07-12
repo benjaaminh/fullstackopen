@@ -1,0 +1,1 @@
+NOTE: before running npm run build, run npm update
