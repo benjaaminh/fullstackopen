@@ -32,9 +32,31 @@ const mostBlogs=(blogs) => {
   })
 }
 
+const mostLikes=(blogs)=>{
+ const authorsAndLikes= blogs.reduce((sum,{author,likes})=>{
+  sum[author]=sum[author]||0
+  sum[author]+=likes
+  return sum
+ },{})
+
+const likes = Object.values(authorsAndLikes)
+const authors = Object.keys(authorsAndLikes)
+
+maxLikes= Math.max(...likes)
+
+const mostLiked= {
+  author: authors[likes.indexOf(maxLikes)],
+  likes: maxLikes
+}
+
+return mostLiked
+
+}
+
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
-  mostBlogs
+  mostBlogs,
+  mostLikes
 }

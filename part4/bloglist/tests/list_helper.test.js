@@ -104,4 +104,12 @@ describe('favorite blog', () => {
       author: largeList[3].author,
       blogs: 3 })
   })
+
+  test('author with most likes', ()=> {
+    const result = listHelper.mostLikes(largeList)
+    expect(result).toEqual({
+      author: largeList[2].author,
+      likes: 17
+    })
+  })
 })
