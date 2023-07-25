@@ -102,6 +102,55 @@ beforeEach(async () => {
 
   })
 
+  test('deletion succeeds with code 204 if id is valid', async () =>{
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToDelete = blogsAtStart[0]
+  
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .expect(204)
+  
+    const blogsAtEnd = await helper.blogsInDb()
+  
+    expect(blogsAtEnd).toHaveLength(
+      helper.initialBlogs.length - 1
+    )
+  
+    const titles = blogsAtEnd.map(r => r.title)
+  
+    expect(titles).not.toContain(blogToDelete.title)
+  })
+
+  test('deletion does not succeed  if id is invalid', async () =>{
+    const invalidId='5a3d5da59070081a82a3445'
+
+  
+    await api
+      .delete(`/api/blogs/${invalidId}`)
+      .expect(400)
+  })
+
+  test('updating likes works', async () =>{
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToUpdate = blogsAtStart[0]
+
+    const updatedBlog={
+      title: `${blogToUpdate.title}`,
+      author: `${blogToUpdate.author}`,
+      url: `${blogToUpdate.url}`,
+      likes: 6
+    } 
+
+   await api
+    .put(`/api/blogs/${blogToUpdate.id}`)
+    .send(updatedBlog)
+    .expect(200)
+
+    const blogsAtEnd = await helper.blogsInDb()
+   
+    expect(blogsAtEnd[0].likes).toBe(6)
+  })
+
   afterAll(async () => {
     await mongoose.connection.close()
   })
