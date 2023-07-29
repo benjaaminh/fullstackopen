@@ -6,22 +6,41 @@ const api = supertest(app)
 const Blog = require('../models/blog')
 const User = require('../models/user')
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 
 beforeEach(async () => {
     await Blog.deleteMany({})
-  
-    const blogObjects = helper.initialBlogs
-    .map(blog => new Blog(blog))
-  
-    const promiseArray=blogObjects.map(blog=>blog.save())
-    await Promise.all(promiseArray)
+    await Blog.insertMany(helper.initialBlogs)
   
   })
 
+  describe('retrieving blog information', () =>{
+    token=null
+    beforeAll(async () => {
+      User.deleteMany({})
+    
+      const password="password"
+      const saltRounds = 10
+      const passwordHash = await bcrypt.hash(password, saltRounds)
+    
+      const user=  new User({username:"user", passwordHash})
+      await user.save()
+    
+      const userForToken = {
+        username: user.username,
+        id: user._id,
+      }
+    
+       token = jwt.sign
+      (userForToken, process.env.SECRET,
+        { expiresIn:60*60 })
+    return token
+    })
   test('correct amount of blogs are returned as json', async () => {
     const response = await api
       .get('/api/blogs')
       .expect(200)
+      .set('Authorization', `Bearer ${token}`)
       .expect('Content-Type', /application\/json/)
       
       expect(response.body).toHaveLength(helper.initialBlogs.length)
@@ -35,12 +54,16 @@ beforeEach(async () => {
     const blogResult = await api
     .get(`/api/blogs/${blogExample.id}`)
     .expect(200)
+    .set('Authorization', `Bearer ${token}`)
     .expect('Content-Type', /application\/json/)
     
     expect(blogResult.body.id).toBeDefined()
   })
+ 
+
 
   test('a blog can be added', async () =>{
+
     const newBlog={
       title: 'new blog',
       author: 'joe',
@@ -51,6 +74,7 @@ beforeEach(async () => {
     await api
     .post('/api/blogs')
     .send(newBlog)
+    .set('Authorization', `Bearer ${token}`)
     .expect(201)
     .expect('Content-Type', /application\/json/)
 
@@ -72,6 +96,7 @@ beforeEach(async () => {
    const response= await api
     .post('/api/blogs')
     .send(newBlog)
+    .set('Authorization', `Bearer ${token}`)
     .expect(201)
     .expect('Content-Type', /application\/json/)
 
@@ -87,6 +112,7 @@ beforeEach(async () => {
     await api
     .post('/api/blogs')
     .send(newBlog)
+    .set('Authorization', `Bearer ${token}`)
     .expect(400)
 
   })
@@ -100,16 +126,34 @@ beforeEach(async () => {
     await api
     .post('/api/blogs')
     .send(newBlog)
+    .set('Authorization', `Bearer ${token}`)
+    .expect(400)
+
+  })
+  test('returns 400 if token is missing', async () => {
+    const newBlog={
+      title: 'new blog',
+      author: 'joe',
+      url: 'example.com',
+      likes: 5
+    } 
+    token=null
+    await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .set('Authorization', `Bearer ${token}`)
     .expect(400)
 
   })
 
+//yet to update creator of blog, test fails.
   test('deletion succeeds with code 204 if id is valid', async () =>{
     const blogsAtStart = await helper.blogsInDb()
     const blogToDelete = blogsAtStart[0]
   
     await api
       .delete(`/api/blogs/${blogToDelete.id}`)
+      .set('Authorization', `Bearer ${token}`)
       .expect(204)
   
     const blogsAtEnd = await helper.blogsInDb()
@@ -129,6 +173,7 @@ beforeEach(async () => {
   
     await api
       .delete(`/api/blogs/${invalidId}`)
+      .set('Authorization', `Bearer ${token}`)
       .expect(400)
   })
 
@@ -146,13 +191,14 @@ beforeEach(async () => {
    await api
     .put(`/api/blogs/${blogToUpdate.id}`)
     .send(updatedBlog)
+    .set('Authorization', `Bearer ${token}`)
     .expect(200)
 
     const blogsAtEnd = await helper.blogsInDb()
    
     expect(blogsAtEnd[0].likes).toBe(6)
   })
-
+  })
   describe('when there is initially one user in db', () => {
     beforeEach(async () => {
       await User.deleteMany({})

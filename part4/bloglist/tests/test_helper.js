@@ -65,5 +65,3 @@ const usersInDb = async () => {
 module.exports = {
   initialBlogs, blogsInDb, usersInDb
 }
-
-//TODO: route handler to async await, as well as checking amount of blog posts

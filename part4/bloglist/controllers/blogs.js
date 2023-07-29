@@ -4,13 +4,6 @@ const User = require('../models/user')
 const jwt = require('jsonwebtoken')
 
 
-const getTokenFrom = request => {
-  const authorization = request.get('authorization')
-  if (authorization && authorization.startsWith('Bearer ')){
-    return authorization.replace('Bearer ', '')  }
-  return null
-}
-
 blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog
   .find({}).populate('user',{username:1,name:1})
@@ -31,13 +24,7 @@ blogsRouter.get('/:id', async (request, response) => {
 blogsRouter.post('/', async (request, response) => {
 const body = request.body
 
-const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
-if (!decodedToken.id)
-{    return response.status(401).json({
-  error: 'token invalid'
-})
-}
-const user = await User.findById(decodedToken.id)
+const user = request.user
 
  const blog = new Blog({
   title:body.title,
@@ -56,8 +43,22 @@ const user = await User.findById(decodedToken.id)
 })
 
 blogsRouter.delete('/:id', async (request, response) => {
-  await Blog.findByIdAndRemove(request.params.id)
+ 
+  const loggedInUser = request.user
+
+  const blogtoDelete = await Blog.findById(request.params.id)
+
+  if (blogtoDelete.user.toString() === loggedInUser.id.toString()){
+    await Blog.findByIdAndRemove(request.params.id)
   response.status(204).end()
+  }
+  else{
+    return response.status(401).json({
+      error: 'wrong account'
+    })
+  }
+
+  
 })
 
 blogsRouter.put('/:id', async (request, response) => {
