@@ -15,7 +15,7 @@ beforeEach(async () => {
   })
 
   describe('retrieving blog information', () =>{
-    token=null
+  let  token=null
     beforeAll(async () => {
       User.deleteMany({})
     
