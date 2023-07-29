@@ -11,9 +11,9 @@ const setToken = newToken => {
   }
 }
 
-const getAll = () => {
-  const request = axios.get(baseUrl,config)
-  return request.then(response => response.data)
+const getAll = async () => {
+  const response = await axios.get(baseUrl,config)
+  return response.data
 }
 
 

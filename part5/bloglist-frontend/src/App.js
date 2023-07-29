@@ -20,6 +20,7 @@ const App = () => {
 
 
 
+
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if (loggedUserJSON) {
@@ -83,16 +84,33 @@ const App = () => {
     </form>
   )
 
+  const logoutForm = () => (
+    <form onSubmit={handleLogout}>
+      <button type="submit">logout</button>
+    </form>
+  )
+
+  const handleLogout = () => {
+    window.localStorage.clear()
+    setUser(null)
+  }
+
+  if (user === null) {
+    return (
+      <div>
+        <h2>Log in to application</h2>
+        {loginForm()}
+      </div>
+    )
+  }
+
   return (
     <div>
       <h2>blogs</h2>
-      {!user && loginForm()}  {/* if user===null, load loginform*/}
-      {user && <div>        {/*if user exists, load noteform and show name */}
-        <p>{user.name} logged in</p>
-        {blogForm()}
-
-      </div>
-}
+      {blogs.map(blog =>
+        <Blog key={blog.id} blog={blog} />
+      )}
+      {logoutForm()}
     </div>
   )
 }
