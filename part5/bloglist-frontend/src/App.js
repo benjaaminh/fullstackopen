@@ -15,11 +15,13 @@ const App = () => {
   const [notification, setNotification] = useState(null)
   const blogFormRef = useRef()
 
+  const [refreshBlogs, setRefreshBlogs] = useState(false)
+
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
     )  
-  }, [])
+  }, [refreshBlogs]) //will render everytime state of refresh changes, meaning the blogs will refresh everytime a new one is added, since state of refreshblogs changes then
 
 
 
@@ -71,6 +73,7 @@ const addBlog = async (blogObject) => {
   const blog= await blogService
   .create(blogObject)
   setBlogs(blogs.concat(blog))
+  setRefreshBlogs(!refreshBlogs)
   setNotification(`a new blog ${blog.title} by ${blog.author} was added`)
   setTimeout(() => {
     setNotification(null)
@@ -113,6 +116,7 @@ const blogForm= () => (
       {blogForm()}
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
+        
       )}
     </div>
   )
