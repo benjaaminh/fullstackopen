@@ -19,10 +19,10 @@ const showWhenVisible = { display: visible ? '' : 'none' }
 
   return (
     <div>
-      <div style={hideWhenVisible}>
+      <div style={hideWhenVisible}>{/*when visible=false */}
         <button onClick={toggleVisibility}>{props.buttonLabel}</button>
       </div>
-      <div style={showWhenVisible}>
+      <div style={showWhenVisible}>{/*when visible=true*/}
         {props.children}
         <button onClick={toggleVisibility}>cancel</button>
       </div>

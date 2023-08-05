@@ -67,6 +67,12 @@ const App = () => {
     setUser(null)
   } 
 
+  const updateLikes = async (id,blogObject) => {
+    const updatedBlog = await blogService
+    .update(id,blogObject)
+    setBlogs(blogs.map(blog=>blog.id!==id? blog: updatedBlog))
+    setRefreshBlogs(!refreshBlogs) //to update view, so user is visible
+  }
 
 const addBlog = async (blogObject) => {
   blogFormRef.current.toggleVisibility()
@@ -86,12 +92,14 @@ const blogForm= () => (
 </Togglable>
 )
   
-
-  if (user === null) {
+const sortedBlogs=blogs.sort((a,b)=>b.likes-a.likes)
+ 
     return (
       <div>
+              <Notification message={notification} />
+      {!user && //if no user is logged in:render this
+<div>
         <h2>Log in to application</h2>
-        <Notification message={notification} />
         <Togglable buttonLabel="log in">
         <LoginForm
         username={username}
@@ -102,24 +110,24 @@ const blogForm= () => (
           />
 
         </Togglable>
-      </div>
-    )
-  }
+ </div>
+      }
+  
 
-  return (
+{user && //if a user is logged in, render this
     <div>
-      <h2>blogs</h2>
-      <Notification message={notification} />
-      
+      <h2>blogs</h2>  
       <p>{user.name} logged in  {logoutButton()}</p>
       <h2>create new</h2>
       {blogForm()}
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+      {sortedBlogs.map(blog =>
+        <Blog key={blog.id} blog={blog} updateLikes={updateLikes} />
         
       )}
     </div>
-  )
+
+      }
+      </div>)
 }
 
 export default App
