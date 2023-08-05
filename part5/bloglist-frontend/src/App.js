@@ -56,7 +56,13 @@ const App = () => {
     }
   }
   
-  
+  const handleDelete = async (blogObject) => {
+    if (window.confirm(`do you want to delete '${blogObject.title} by ${blogObject.title}'?`)) {
+     await blogService
+        .remove(blogObject.id)
+        setBlogs(blogs.filter(b=>b.id !== blogObject.id))
+    }
+  }
 
   const logoutButton = () => (
     <button onClick={handleLogout}>logout</button>
@@ -121,7 +127,7 @@ const sortedBlogs=blogs.sort((a,b)=>b.likes-a.likes)
       <h2>create new</h2>
       {blogForm()}
       {sortedBlogs.map(blog =>
-        <Blog key={blog.id} blog={blog} updateLikes={updateLikes} />
+        <Blog key={blog.id} blog={blog} updateLikes={updateLikes} handleDelete={handleDelete} user={user} />
         
       )}
     </div>

@@ -1,8 +1,10 @@
 import {useState } from 'react'
 
-const Blog = ({blog,updateLikes}) => {
+const Blog = ({blog,updateLikes,handleDelete, user}) => {
   const [visible,setVisible] =useState(false)
+  const [correctUser,setCorrectUser]= useState(false)
   const showWhenVisible = { display: visible ? '' : 'none' } //visible=true will display element
+  const showWhenCorrectUser= {display: correctUser? '': 'none'}
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -14,7 +16,11 @@ const buttonText= visible ? "hide" : "view"
 
   const toggleView= () => {
     setVisible(!visible)
+    if (blog.user.username===user.username){
+      setCorrectUser(!correctUser)
     }
+    }
+
 
    const  handleLikes = () =>{
       const updatedBlog = {
@@ -26,7 +32,12 @@ const buttonText= visible ? "hide" : "view"
       }
       updateLikes(blog.id,updatedBlog)
     }
- 
+
+    const handleBlogRemoval = () =>{
+      handleDelete(blog)
+    }
+
+  
       return(
         <div style={blogStyle}>
           {blog.title} {blog.author}
@@ -35,6 +46,9 @@ const buttonText= visible ? "hide" : "view"
         <div>{blog.url}</div>
         <div>likes {blog.likes} <button onClick={handleLikes}>like </button></div>
         <div>{blog.user.name}</div>
+        <div style={showWhenCorrectUser}>
+          <button onClick={handleBlogRemoval}>remove</button>
+        </div>
         </div>
         </div>
       )
