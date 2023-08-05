@@ -5,17 +5,17 @@ const Togglable =forwardRef( (props,refs) => {
 
   const hideWhenVisible = { display: visible ? 'none' : '' } //visible is default false
   //if it is true, dont display; display variable becomes none
-const showWhenVisible = { display: visible ? '' : 'none' }   
+  const showWhenVisible = { display: visible ? '' : 'none' }
 
   const toggleVisibility = () => {
     setVisible(!visible)
   }
 
-  useImperativeHandle(refs, () => { 
-       return {  
-            toggleVisibility  
-            } 
-           })
+  useImperativeHandle(refs, () => {
+    return {
+      toggleVisibility
+    }
+  })
 
   return (
     <div>
@@ -29,5 +29,5 @@ const showWhenVisible = { display: visible ? '' : 'none' }
     </div>
   )
 })
-
+Togglable.displayName='Togglable'
 export default Togglable

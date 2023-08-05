@@ -12,7 +12,7 @@ const setToken = newToken => {
 }
 
 const create = async newObject => {
-  
+
 
   const response = await axios.post(baseUrl, newObject, config)
   return response.data
@@ -34,5 +34,4 @@ const remove = async (id) => {
 }
 
 
-// eslint-disable-next-line import/no-anonymous-default-export
 export default { getAll,setToken,create,update,remove }
