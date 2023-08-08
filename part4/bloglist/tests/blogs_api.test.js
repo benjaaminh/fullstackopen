@@ -146,7 +146,6 @@ beforeEach(async () => {
 
   })
 
-//yet to update creator of blog, test fails.
   test('deletion succeeds with code 204 if id is valid', async () =>{
     const blogsAtStart = await helper.blogsInDb()
     const blogToDelete = blogsAtStart[0]
