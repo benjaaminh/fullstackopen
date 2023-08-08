@@ -19,7 +19,7 @@ const App = () => {
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
-      setBlogs( blogs )
+      setBlogs(blogs)
     )
   }, [refreshBlogs]) //will render everytime state of refresh changes, meaning the blogs will refresh everytime a new one is added, since state of refreshblogs changes then
 
@@ -49,6 +49,7 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
+      console.log(exception)
       setNotification('failed: wrong username or password')
       setTimeout(() => {
         setNotification(null)
@@ -73,16 +74,16 @@ const App = () => {
     setUser(null)
   }
 
-  const updateLikes = async (id,blogObject) => {
+  const updateLikes = async (id, blogObject) => {
     const updatedBlog = await blogService
-      .update(id,blogObject)
-    setBlogs(blogs.map(blog => blog.id!==id? blog: updatedBlog))
+      .update(id, blogObject)
+    setBlogs(blogs.map(blog => blog.id !== id ? blog : updatedBlog))
     setRefreshBlogs(!refreshBlogs) //to update view, so user is visible
   }
 
   const addBlog = async (blogObject) => {
     blogFormRef.current.toggleVisibility()
-    const blog= await blogService
+    const blog = await blogService
       .create(blogObject)
     setBlogs(blogs.concat(blog))
     setRefreshBlogs(!refreshBlogs)
@@ -92,45 +93,43 @@ const App = () => {
     }, 5000)
   }
 
-  const blogForm= () => (
+  const blogForm = () => (
     <Togglable buttonLabel='new blog' ref={blogFormRef}>
       <BlogForm createBlog={addBlog} />
     </Togglable>
   )
 
-  const sortedBlogs=blogs.sort((a,b) => b.likes-a.likes)
+  const sortedBlogs = blogs.sort((a, b) => b.likes - a.likes)
 
   return (
     <div>
       <Notification message={notification} />
       {!user && //if no user is logged in:render this
-<div>
-  <h2>Log in to application</h2>
-  <Togglable buttonLabel="log in">
-    <LoginForm
-      username={username}
-      password={password}
-      handleUsernameChange={({ target }) => setUsername(target.value)}
-      handlePasswordChange={({ target }) => setPassword(target.value)}
-      handleSubmit={handleLogin}
-    />
+        <div>
+          <h2>Log in to application</h2>
 
-  </Togglable>
-</div>
+          <LoginForm
+            username={username}
+            password={password}
+            handleUsernameChange={({ target }) => setUsername(target.value)}
+            handlePasswordChange={({ target }) => setPassword(target.value)}
+            handleSubmit={handleLogin}
+          />
+        </div>
       }
 
 
       {user && //if a user is logged in, render this
-    <div>
-      <h2>blogs</h2>
-      <p>{user.name} logged in  {logoutButton()}</p>
-      <h2>create new</h2>
-      {blogForm()}
-      {sortedBlogs.map(blog =>
-        <Blog key={blog.id} blog={blog} updateLikes={updateLikes} handleDelete={handleDelete} user={user} />
+        <div>
+          <h2>blogs</h2>
+          <p>{user.name} logged in  {logoutButton()}</p>
+          <h2>create new</h2>
+          {blogForm()}
+          {sortedBlogs.map(blog =>
+            <Blog key={blog.id} blog={blog} updateLikes={updateLikes} handleDelete={handleDelete} user={user} />
 
-      )}
-    </div>
+          )}
+        </div>
 
       }
     </div>)
