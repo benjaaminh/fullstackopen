@@ -99,7 +99,7 @@ const App = () => {
     </Togglable>
   )
 
-  const sortedBlogs = blogs.sort((a, b) => b.likes - a.likes)
+  const sortedBlogs = blogs.sort((a, b) => b.likes - a.likes) //sorted blogs
 
   return (
     <div>
