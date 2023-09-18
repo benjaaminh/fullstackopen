@@ -23,9 +23,5 @@ const vote = async (anecdote) => {
   const response = await axios.put(`${baseUrl}/${anecdote.id}`, newAnecdote)
   return response.data
 }
-
-export default {
-  getAll,
-vote,
-  createNew,
-}
+// eslint-disable-next-line import/no-anonymous-default-export
+export default {getAll,vote,createNew,}
