@@ -1,4 +1,6 @@
-const Notification = ({ message }) => {
+import { useSelector } from 'react-redux'
+
+const Notification = () => {
   const notificationStyle = {
     color: "green",
     fontSize: 20,
@@ -18,12 +20,17 @@ const Notification = ({ message }) => {
     borderRadius: 5,
     background: "lightgrey",
   };
-  if (message === null) {
+
+  const notification = useSelector(({notification})=>{
+    return notification
+  })
+
+  if (notification === null) {
     return null;
-  } else if (message.toLowerCase().includes("fail")) {
-    return <div style={errorStyle}>{message}</div>;
+  } else if (notification.toLowerCase().includes("fail")) {
+    return <div style={errorStyle}>{notification}</div>;
   } else {
-    return <div style={notificationStyle}>{message}</div>;
+    return <div style={notificationStyle}>{notification}</div>;
   }
 };
 
