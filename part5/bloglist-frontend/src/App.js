@@ -58,7 +58,7 @@ const App = () => {
   }
 
   const handleDelete = async (blogObject) => {
-    if (window.confirm(`do you want to delete '${blogObject.title} by ${blogObject.title}'?`)) {
+    if (window.confirm(`do you want to delete '${blogObject.title} by ${blogObject.author}'?`)) {
       await blogService
         .remove(blogObject.id)
       setBlogs(blogs.filter(b => b.id !== blogObject.id))
