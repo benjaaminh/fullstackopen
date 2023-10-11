@@ -6,23 +6,25 @@ import Notification from "./components/Notification";
 import BlogForm from "./components/BlogForm";
 import Togglable from "./components/Togglable";
 import LoginForm from "./components/LoginForm";
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import {setNotification } from "./reducers/notificationReducer"
+import { initializeBlogs, likeBlog } from "./reducers/blogReducer";
 
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
   const blogFormRef = useRef();
 
-  const [refreshBlogs, setRefreshBlogs] = useState(false);
-
   const dispatch = useDispatch()
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs));
-  }, [refreshBlogs]); //will render everytime state of refresh changes, meaning the blogs will refresh everytime a new one is added, since state of refreshblogs changes then
+   dispatch(initializeBlogs())
+  }, [dispatch]);
+
+const blogs = useSelector(({blogs}) =>{//bringing blogs from store
+  return blogs
+})
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser");
@@ -52,16 +54,6 @@ const App = () => {
     }
   }
 
-  const handleDelete = async (blogObject) => {
-    if (
-      window.confirm(
-        `do you want to delete '${blogObject.title} by ${blogObject.title}'?`,
-      )
-    ) {
-      await blogService.remove(blogObject.id);
-      setBlogs(blogs.filter((b) => b.id !== blogObject.id));
-    }
-  };
 
   const logoutButton = () => <button onClick={handleLogout}>logout</button>;
 
@@ -70,27 +62,16 @@ const App = () => {
     setUser(null);
   };
 
-  const updateLikes = async (id, blogObject) => {
-    const updatedBlog = await blogService.update(id, blogObject);
-    setBlogs(blogs.map((blog) => (blog.id !== id ? blog : updatedBlog)));
-    setRefreshBlogs(!refreshBlogs); //to update view, so user is visible
-  };
 
-  const addBlog = async (blogObject) => {
-    blogFormRef.current.toggleVisibility();
-    const blog = await blogService.create(blogObject);
-    setBlogs(blogs.concat(blog));
-    setRefreshBlogs(!refreshBlogs);
-    dispatch(setNotification((`a new blog ${blog.title} by ${blog.author} was added`),5));
-  };
 
   const blogForm = () => (
     <Togglable buttonLabel="new blog" ref={blogFormRef}>
-      <BlogForm createBlog={addBlog} />
+      <BlogForm />
     </Togglable>
   );
 
-  const sortedBlogs = blogs.sort((a, b) => b.likes - a.likes); //sorted blogs
+  const copy= [...blogs]
+  const sortedBlogs = copy.sort((a, b) => b.likes - a.likes); //sorted blogs
 
   return (
     <div>
@@ -121,8 +102,6 @@ const App = () => {
             <Blog
               key={blog.id}
               blog={blog}
-              updateLikes={updateLikes}
-              handleDelete={handleDelete}
               user={user}
             />
           ))}

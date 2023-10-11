@@ -11,7 +11,7 @@ const setToken = (newToken) => {
   };
 };
 
-const create = async (newObject) => {
+const createNew = async (newObject) => {
   const response = await axios.post(baseUrl, newObject, config);
   return response.data;
 };
@@ -21,7 +21,7 @@ const getAll = async () => {
   return response.data;
 };
 
-const update = async (id, newObject) => {
+const update = async (id, newObject) => {//FIX THIS, TWO PARAMETERS
   const response = await axios.put(`${baseUrl}/${id}`, newObject);
   return response.data;
 };
@@ -31,4 +31,4 @@ const remove = async (id) => {
   return response.data;
 };
 // eslint-disable-next-line
-export default { getAll, setToken, create, update, remove };
+export default { getAll, setToken, createNew, update, remove };

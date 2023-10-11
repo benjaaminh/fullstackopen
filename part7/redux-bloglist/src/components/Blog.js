@@ -1,6 +1,9 @@
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux"
+import { setNotification } from "../reducers/notificationReducer";
+import { deleteBlog, likeBlog } from "../reducers/blogReducer";
 
-const Blog = ({ blog, updateLikes, handleDelete, user }) => {
+const Blog = ({ blog, handleDelete, user }) => {
   const [visible, setVisible] = useState(false);
   const [correctUser, setCorrectUser] = useState(false);
   const showWhenVisible = { display: visible ? "" : "none" }; //visible=true will display element
@@ -14,6 +17,8 @@ const Blog = ({ blog, updateLikes, handleDelete, user }) => {
   };
   const buttonText = visible ? "hide" : "view";
 
+const dispatch = useDispatch()
+
   const toggleView = () => {
     setVisible(!visible);
     if (blog.user.username === user.username) {
@@ -21,19 +26,23 @@ const Blog = ({ blog, updateLikes, handleDelete, user }) => {
     }
   };
 
-  const handleLikes = () => {
-    const updatedBlog = {
-      user: blog.user.id,
-      likes: blog.likes + 1,
-      author: blog.author,
-      title: blog.title,
-      url: blog.url,
+  const updateLikes = () => {
+    const updatedBlog={
+      ...blog,
+      likes:blog.likes+1
+    }
+    dispatch(likeBlog(blog.id,updatedBlog))
+    dispatch(setNotification(("helo"),5))
     };
-    updateLikes(blog.id, updatedBlog);
-  };
 
   const handleBlogRemoval = () => {
-    handleDelete(blog);
+    if (
+      window.confirm(
+        `do you want to delete '${blog.title} by ${blog.title}'?`,
+      )
+    ) {
+      dispatch(deleteBlog(blog))
+    }
   };
 
   return (
@@ -50,7 +59,7 @@ const Blog = ({ blog, updateLikes, handleDelete, user }) => {
         <div>{blog.url}</div>
         <div>
           likes {blog.likes}{" "}
-          <button id="like-button" onClick={handleLikes}>
+          <button id="like-button" onClick={updateLikes}>
             like{" "}
           </button>
         </div>

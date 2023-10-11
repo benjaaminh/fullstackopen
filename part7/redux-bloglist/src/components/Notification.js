@@ -21,7 +21,7 @@ const Notification = () => {
     background: "lightgrey",
   };
 
-  const notification = useSelector(({notification})=>{
+  const notification = useSelector(({notification})=>{//take notification from store
     return notification
   })
 

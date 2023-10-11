@@ -1,49 +1,45 @@
-import { useState } from "react";
 
-const BlogForm = ({ createBlog }) => {
-  const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
-  const [url, setUrl] = useState("");
+import { createBlog } from "../reducers/blogReducer";
+import { setNotification } from "../reducers/notificationReducer";
+import { useDispatch } from "react-redux"
 
-  const addBlog = (event) => {
+const BlogForm = () => {
+const dispatch = useDispatch()
+
+  const addBlog = async (event) => {
     event.preventDefault();
-    createBlog({
-      title: title,
-      author: author,
-      url: url,
-    });
-    setTitle("");
-    setAuthor("");
-    setUrl("");
-  };
+const blogObject={
+  title:event.target.title.value,
+  author:event.target.author.value,
+  url:event.target.url.value
+}
+  event.target.url.value=''
+  event.target.author.value=''
+  event.target.title.value=''
+
+  dispatch(createBlog(blogObject))
+  dispatch(setNotification(("helo"),5))
+}
+  
 
   return (
     <form onSubmit={addBlog}>
       <div>
         title:
         <input
-          id="title"
-          value={title}
-          onChange={({ target }) => setTitle(target.value)}
-          placeholder="write title text here"
+      name="title"
         />
       </div>
       <div>
         author:
         <input
-          id="author"
-          value={author}
-          onChange={({ target }) => setAuthor(target.value)}
-          placeholder="write author text here"
+        name="author"
         />
       </div>
       <div>
         url:
         <input
-          id="url"
-          value={url}
-          onChange={({ target }) => setUrl(target.value)}
-          placeholder="write url text here"
+         name="url"
         />
       </div>
       <button id="create-button" type="submit">
