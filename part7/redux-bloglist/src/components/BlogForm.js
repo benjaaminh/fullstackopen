@@ -18,7 +18,7 @@ const blogObject={
   event.target.title.value=''
 
   dispatch(createBlog(blogObject))
-  dispatch(setNotification(("helo"),5))
+  dispatch(setNotification((`${blogObject.title} created`),5))
 }
   
 

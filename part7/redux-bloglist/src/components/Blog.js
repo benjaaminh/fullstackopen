@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux"
+import { useDispatch } from "react-redux"
 import { setNotification } from "../reducers/notificationReducer";
 import { deleteBlog, likeBlog } from "../reducers/blogReducer";
 
@@ -32,7 +32,7 @@ const dispatch = useDispatch()
       likes:blog.likes+1
     }
     dispatch(likeBlog(blog.id,updatedBlog))
-    dispatch(setNotification(("helo"),5))
+    dispatch(setNotification((`${blog.title} liked`),5))
     };
 
   const handleBlogRemoval = () => {
