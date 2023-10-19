@@ -5,9 +5,22 @@ import BlogForm from "./components/BlogForm";
 import Togglable from "./components/Togglable";
 import LoginForm from "./components/LoginForm";
 import { useDispatch, useSelector } from "react-redux"
-
+import UserList from "./components/UserList";
 import { initializeBlogs  } from "./reducers/blogReducer";
 import { initializeUser, logout } from "./reducers/userReducer";
+import Home from "./components/Home";
+import User from "./components/User";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link,
+  Navigate,
+  useParams,
+  useNavigate,
+  useMatch
+} from "react-router-dom"
+import { initializeUsers } from "./reducers/usersReducer";
 
 const App = () => {
 
@@ -18,6 +31,7 @@ const App = () => {
   useEffect(() => {
    dispatch(initializeBlogs())
    dispatch(initializeUser())
+   dispatch(initializeUsers())
   }, [dispatch]);
 
 const blogs = useSelector(({blogs}) =>{//bringing blogs from store
@@ -34,9 +48,6 @@ const handleLogout= () => {
 }
 
   const logoutButton = () => <button onClick={handleLogout}>logout</button>;
-
-
-
 
   const blogForm = () => (
     <Togglable buttonLabel="new blog" ref={blogFormRef}>
@@ -74,8 +85,14 @@ const handleLogout= () => {
               user={user}
             />
           ))}
+          <Routes>
+        <Route path="/" element={<Home/>}/>
+            <Route path="/users" element={<UserList/>}/>
+            <Route path="/users/:id" element ={<User></User>}/>
+          </Routes>
         </div>
       )}
+
     </div>
   );
 };
