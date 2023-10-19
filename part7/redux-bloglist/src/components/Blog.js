@@ -38,7 +38,7 @@ const dispatch = useDispatch()
   const handleBlogRemoval = () => {
     if (
       window.confirm(
-        `do you want to delete '${blog.title} by ${blog.title}'?`,
+        `do you want to delete '${blog.title} by ${blog.author}'?`,
       )
     ) {
       dispatch(deleteBlog(blog))

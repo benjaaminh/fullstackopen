@@ -14,7 +14,7 @@ const userSlice = createSlice({
         logoutUser(state,action){
             state=null
             return state
-        },//cant logout
+        },
         setLogin(state,action){
             return action.payload
         }
