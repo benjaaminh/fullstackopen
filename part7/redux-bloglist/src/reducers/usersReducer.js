@@ -16,8 +16,8 @@ export const {setUsers} = usersSlice.actions
 
 export const initializeUsers = () =>{
     return async dispatch => {
-        const blogs= await userService.getAll()
-        dispatch(setUsers(blogs))
+        const users= await userService.getAll()
+        dispatch(setUsers(users))
     }
 }
 

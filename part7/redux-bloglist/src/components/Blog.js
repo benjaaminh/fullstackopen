@@ -2,8 +2,18 @@ import { useState } from "react";
 import { useDispatch } from "react-redux"
 import { setNotification } from "../reducers/notificationReducer";
 import { deleteBlog, likeBlog } from "../reducers/blogReducer";
-
-const Blog = ({ blog, handleDelete, user }) => {
+import { useSelector } from "react-redux"
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link,
+  Navigate,
+  useParams,
+  useNavigate,
+  useMatch
+} from "react-router-dom"
+const Blog = () => {
   const [visible, setVisible] = useState(false);
   const [correctUser, setCorrectUser] = useState(false);
   const showWhenVisible = { display: visible ? "" : "none" }; //visible=true will display element
@@ -19,12 +29,18 @@ const Blog = ({ blog, handleDelete, user }) => {
 
 const dispatch = useDispatch()
 
-  const toggleView = () => {
-    setVisible(!visible);
-    if (blog.user.username === user.username) {
-      setCorrectUser(!correctUser);
-    }
-  };
+const blogs = useSelector(({blogs}) => {
+  return blogs
+})
+const match = useMatch('/blogs/:id')
+
+const blog = match
+  ? blogs.find(blog => blog.id === String(match.params.id)) //OBS! string, not number
+  : null
+
+  if (!blog) {
+    return null
+  }
 
   const updateLikes = () => {
     const updatedBlog={
@@ -46,31 +62,22 @@ const dispatch = useDispatch()
   };
 
   return (
-    <div className="blog" style={blogStyle}>
-      <div className="hidden">
-        {blog.title} {blog.author}
-        <button id="view-button" onClick={toggleView}>
-          {buttonText}
-        </button>
-      </div>
-      <div className="visible" style={showWhenVisible}>
-        {" "}
-        {/*when visible=true, shows this part*/}
-        <div>{blog.url}</div>
+    <div className="blog" >
+    <div>
+    <h2>{blog.title}</h2>
+    </div>
         <div>
-          likes {blog.likes}{" "}
+          <a href={blog.url}>{blog.url}</a>
+          </div>
+           {blog.likes} likes
           <button id="like-button" onClick={updateLikes}>
             like{" "}
           </button>
+        <div>added by {blog.user.name}</div>
+        <h3>comments</h3>
+         
+        
         </div>
-        <div>{blog.user.name}</div>
-        <div style={showWhenCorrectUser}>
-          <button id="remove-button" onClick={handleBlogRemoval}>
-            remove
-          </button>
-        </div>
-      </div>
-    </div>
   );
 };
 

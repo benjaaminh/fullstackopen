@@ -57,10 +57,21 @@ const handleLogout= () => {
 
   const copy= [...blogs]
   const sortedBlogs = copy.sort((a, b) => b.likes - a.likes); //sorted blogs
+  const padding = {
+    padding: 5
+  }
 
   return (
     <div>
       <Notification/>
+      <div>
+        <Link style={padding} to="/">blogs</Link>
+        <Link style={padding} to="/users">users</Link>
+        {user
+          ? <em style={padding}>{user.name} logged in {logoutButton()}</em>
+          : <Link style={padding} to="/login">login</Link>
+        }
+      </div>
       {!user && ( //if no user is logged in:render this
         <div>
           <h2>Log in to application</h2>
@@ -73,22 +84,16 @@ const handleLogout= () => {
       {user && ( //if a user is logged in, render this
         <div>
           <h2>blogs</h2>
-          <p>
-            {user.name} logged in {logoutButton()}
-          </p>
+        
           <h2>create new</h2>
           {blogForm()}
-          {sortedBlogs.map((blog) => (
-            <Blog
-              key={blog.id}
-              blog={blog}
-              user={user}
-            />
-          ))}
+          
           <Routes>
         <Route path="/" element={<Home/>}/>
             <Route path="/users" element={<UserList/>}/>
             <Route path="/users/:id" element ={<User></User>}/>
+            <Route path="/blogs/:id" element={<Blog></Blog>}/>
+            <Route path="/login" elemet={<LoginForm></LoginForm>}/>
           </Routes>
         </div>
       )}

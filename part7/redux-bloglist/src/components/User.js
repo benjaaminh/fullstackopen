@@ -20,7 +20,7 @@ const User = () => {
   const user = match
     ? users.find(user => user.id === String(match.params.id)) //OBS! string, not number
     : null
-    console.log(user)
+
     if (!user) {
       return null
     }
@@ -28,9 +28,11 @@ const User = () => {
   
     return (
       <div>
-        <h2>{user.name}</h2>
-        <h2>added blogs</h2>
+        <h1>{user.name}</h1>
+        <h3>added blogs</h3>
+        <ul>
        {user.blogs.map(blog=><li key={blog.id}>{blog.title}</li>)}
+       </ul>
       </div>
     )
   }

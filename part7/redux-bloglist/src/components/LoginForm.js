@@ -2,18 +2,32 @@ import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux"
 import { login } from "../reducers/userReducer";
 import { initializeBlogs } from "../reducers/blogReducer";
-
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link,
+  Navigate,
+  useParams,
+  useNavigate,
+  useMatch
+} from "react-router-dom"
 const LoginForm = () => {
   const dispatch = useDispatch()
+  
 
-  const handleLogin = (event) =>{
+    const navigate = useNavigate()
+    
+    const handleLogin = (event) =>{
     event.preventDefault()
     const username=event.target.username.value
     const password=event.target.password.value
     event.target.username.value=''
     event.target.password.value=''
     dispatch(login(username,password))
+    navigate('/')
     }
+    
 
   return (
     <div>
