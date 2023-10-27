@@ -1,4 +1,4 @@
-import { useSelector } from 'react-redux'
+import { useSelector } from "react-redux";
 
 const Notification = () => {
   const notificationStyle = {
@@ -21,9 +21,10 @@ const Notification = () => {
     background: "lightgrey",
   };
 
-  const notification = useSelector(({notification})=>{//take notification from store
-    return notification
-  })
+  const notification = useSelector(({ notification }) => {
+    //take notification from store
+    return notification;
+  });
 
   if (notification === null) {
     return null;

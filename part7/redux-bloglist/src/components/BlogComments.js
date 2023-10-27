@@ -1,25 +1,24 @@
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { createComment, initializeComments } from '../reducers/commentReducer';
+import { createComment, initializeComments } from "../reducers/commentReducer";
 //import AddCommentForm from './AddCommentForm'
 
 const BlogComment = ({ id }) => {
-  const comments = useSelector(state => state.comments)
-  const dispatch = useDispatch()
+  const comments = useSelector((state) => state.comments);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-
-    dispatch(initializeComments(id))
+    dispatch(initializeComments(id));
   }, [dispatch, id]);
 
   const addComment = async (event) => {
-    event.preventDefault()
+    event.preventDefault();
     const newComment = {
-      content: event.target.content.value
-    }
-    event.target.content.value = ''
-    dispatch(createComment(id, newComment))
-  }
+      content: event.target.content.value,
+    };
+    event.target.content.value = "";
+    dispatch(createComment(id, newComment));
+  };
   return (
     <div>
       <h3>comments</h3>
@@ -28,7 +27,6 @@ const BlogComment = ({ id }) => {
           <input name="content" />
           <button type="submit">add comment</button>
         </div>
-
       </form>
       <p></p>
       <ul>
@@ -37,7 +35,7 @@ const BlogComment = ({ id }) => {
         ))}
       </ul>
     </div>
-  )
-}
+  );
+};
 
-export default BlogComment
+export default BlogComment;

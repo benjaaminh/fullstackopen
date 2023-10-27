@@ -1,41 +1,30 @@
-import Blog from "./Blog"
-import { useSelector } from "react-redux"
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Link,
-  Navigate,
-  useParams,
-  useNavigate,
-  useMatch
-} from "react-router-dom"
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { Table } from "react-bootstrap";
 const BlogList = () => {
-    const blogs = useSelector(({blogs}) =>{//bringing blogs from store
-        return blogs
-      })
-      const user = useSelector(({user}) => {
-        return user
-      })
+  const blogs = useSelector(({ blogs }) => {
+    //bringing blogs from store
+    return blogs;
+  });
 
-      const copy= [...blogs]
+  const copy = [...blogs];
   const sortedBlogs = copy.sort((a, b) => b.likes - a.likes); //sorted blogs
 
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: "solid",
-    borderWidth: 1,
-    marginBottom: 5,
-  };
-
-return (
-<div>
-{sortedBlogs.map(blog=>
-<li style = {blogStyle} key ={blog.id}> 
-<Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
-</li>)}
-  </div>
-  )
-}
-export default BlogList
+  return (
+    <div>
+      <Table striped>
+        <tbody>
+          {sortedBlogs.map((blog) => (
+            <tr key={blog.id}>
+              <td>
+                <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+              </td>
+              <td>{blog.user.name}</td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+    </div>
+  );
+};
+export default BlogList;
