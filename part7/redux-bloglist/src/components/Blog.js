@@ -3,6 +3,8 @@ import { useDispatch } from "react-redux"
 import { setNotification } from "../reducers/notificationReducer";
 import { deleteBlog, likeBlog } from "../reducers/blogReducer";
 import { useSelector } from "react-redux"
+import { useEffect } from "react";
+import { initializeComments } from "../reducers/commentReducer";
 import {
   BrowserRouter as Router,
   Routes,
@@ -13,6 +15,7 @@ import {
   useNavigate,
   useMatch
 } from "react-router-dom"
+import BlogComment from "./BlogComments";
 const Blog = () => {
   const [visible, setVisible] = useState(false);
   const [correctUser, setCorrectUser] = useState(false);
@@ -74,9 +77,7 @@ const blog = match
             like{" "}
           </button>
         <div>added by {blog.user.name}</div>
-        <h3>comments</h3>
-         
-        
+        <BlogComment id={blog.id}/>
         </div>
   );
 };
