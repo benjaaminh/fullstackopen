@@ -1,0 +1,15 @@
+{
+  "name": "library",
+  "version": "1.0.0",
+  "description": "library backend with graphql",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "benjamin",
+  "license": "ISC",
+  "dependencies": {
+    "@apollo/server": "^4.9.5",
+    "graphql": "^16.8.1"
+  }
+}
