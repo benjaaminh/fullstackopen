@@ -4,7 +4,7 @@ import { useMutation } from '@apollo/client'
 import { EDIT_AUTHOR } from '../queries'
 
 const BornForm = ({authors,setError}) => {
-  const [name, setName] = useState(authors[0].name)//set default name for select, so we dont have to change it manually
+  const [name, setName] = useState('')//set default name for select, so we dont have to change it manually
   const [born, setBorn] = useState('')
 
   const [ changeBirthYear, result ] = useMutation(EDIT_AUTHOR)//result is gotten from when born is changed

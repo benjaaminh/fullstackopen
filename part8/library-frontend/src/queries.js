@@ -9,12 +9,14 @@ query {
     id
   }
 }
-`
+`//changed all_books to return author object with name instead of just string
 export const ALL_BOOKS = gql`
 query{
     allBooks {
         title,
-        author,
+        author {
+          name
+        }
         published,
         genres,
         id
@@ -44,6 +46,14 @@ export const EDIT_AUTHOR = gql`
       born
       bookCount
       id
+    }
+  }
+`
+
+export const LOGIN = gql`
+  mutation login($username: String!, $password: String!) {
+    login(username: $username, password: $password)  {
+      value
     }
   }
 `
