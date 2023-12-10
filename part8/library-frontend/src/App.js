@@ -7,6 +7,7 @@ import { ALL_AUTHORS, ALL_BOOKS } from './queries'
 import Notify from './components/Notify'
 import BornForm from './components/BornForm'
 import LoginForm from './components/LoginForm'
+import Recommended from './components/Recommended'
 const App = () => {
   const [token, setToken] = useState(null)
   const result = useQuery(ALL_AUTHORS)
@@ -24,7 +25,6 @@ const App = () => {
   }
   const books= bookresult.data.allBooks
   const authors = result.data.allAuthors//get authors from query
-  //problem: cant render when authors has object
 
   const notify = (message) => {
     setErrorMessage(message)
@@ -58,15 +58,18 @@ const App = () => {
         <button onClick={() => setPage('authors')}>authors</button>
         <button onClick={() => setPage('books')}>books</button>
         <button onClick={() => setPage('add')}>add book</button>
+        <button onClick={() => setPage('recommend')}>recommend</button>
         <button onClick={logout}>logout</button>
 
       </div>
 
-      <Authors show={page === 'authors'} authors={authors} />
+      <Authors show={page === 'authors'} authors={authors} setError={notify} token={token}/>
       <Notify errorMessage={errorMessage} />
       <Books show={page === 'books'} books={books}/>
       <NewBook show={page === 'add'} setError={notify} />
-      <BornForm setError={notify} authors={authors} />
+      <Recommended show={page === 'recommend'} books={books}/>
+     
+      
     </div>
   )
 }

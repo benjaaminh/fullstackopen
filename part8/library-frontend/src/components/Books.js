@@ -5,7 +5,7 @@ const Books = ({show, books}) => {
   const [genre, setGenre] = useState("all")
   const [booksToShow, setBooksToShow] = useState(books)
   const genres = books.map(b=>b.genres).flat() //flatten into one array
-
+  const genresNoDuplicates= [...new Set(genres)]//create a set from genres array to remove duplicates
   if (!show) {
     return null
   }
@@ -46,8 +46,9 @@ const Books = ({show, books}) => {
 
       </table>
       <button onClick={() => resetGenre()}>all</button>
-      {genres.map((g)=>( /*need to put () => in onClick!! otherwise it wont work to just put changeGenre(g)*/
-            <button onClick={() => changeGenre(g)} key={g}>{g}</button>))}
+      {genresNoDuplicates.map((g,index)=>( //index as second parameter for key to prevent duplicate keys 
+      /*need to put () => in onClick!! otherwise it wont work to just put changeGenre(g)*/
+            <button onClick={() => changeGenre(g)} key={index}>{g}</button>))}
     </div>
   )
 }

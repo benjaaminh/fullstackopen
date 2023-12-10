@@ -95,7 +95,7 @@ const resolvers = {
       } else if (args.genre) {//allbooks with genre parameter
         return Book.find({ genre: { $in: args.genre } }).populate('author')//filters by books whose genre array includes given genre
       } else {
-        return Book.find({}).populate('author')//remember to populate
+        return Book.find({}).populate('author')//remember to populate, this fixed loading data problem
       }
 
     },
@@ -109,7 +109,7 @@ const resolvers = {
   Author: {
     bookCount: async (root) => {//custom resolver, to calculate bookcount
       const count = await Book.find({ author: root.id }).countDocuments()//find books by author id and count documents
-      return count//remember to return the value!!
+      return count//remember to return the value, this fixed non nullable problem
     }
   },
   Mutation: {
@@ -139,23 +139,23 @@ const resolvers = {
         await author.save()//save author
       }
       const book = new Book({ ...args, author: author.id })//create new book with author id
-      try{
+      try {
         const savedBook = await book.save()
         return savedBook
 
       }
-        catch(error) {
-          throw new GraphQLError('Creating the book failed', {
-            extensions: {
-              code: 'BAD_USER_INPUT',
-              invalidArgs: args.title,
-              error
-            }
-          })
-        }
+      catch (error) {
+        throw new GraphQLError('Creating the book failed', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            invalidArgs: args.title,
+            error
+          }
+        })
+      }
 
     },
-    editAuthor: async (root, args,context) => {
+    editAuthor: async (root, args, context) => {
       const currentUser = context.currentUser//check for user auth
       if (!currentUser) {
         throw new GraphQLError('not authenticated', {
@@ -164,7 +164,7 @@ const resolvers = {
           }
         })
       }
-      const author = await Author.findOne({ name: args.author })//find the author from args
+      const author = await Author.findOne({ name: args.name })//find the author from args, check that args is args.name and not args.author!!
       if (!author) {
         return null
       }
@@ -184,14 +184,14 @@ const resolvers = {
       return author
     },
     createUser: async (root, args) => {
-      const user = new User({ username: args.username })
+      const user = new User({ ...args })//create user with input arguments
 
       return user.save()
         .catch(error => {
           throw new GraphQLError('Creating the user failed', {
             extensions: {
               code: 'BAD_USER_INPUT',
-              invalidArgs: args.name,
+              invalidArgs: args.username,
               error
             }
           })

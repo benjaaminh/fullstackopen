@@ -41,7 +41,7 @@ const BornForm = ({authors,setError}) => {
             onChange={({ target }) => setBorn(parseInt(target.value))}
           />
         </div>
-        <button type='submit'>change number</button>
+        <button type='submit'>update author</button>
       </form>
     </div>
   )

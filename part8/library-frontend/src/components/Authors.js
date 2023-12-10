@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { useQuery } from '@apollo/client'
 import { ALL_AUTHORS } from '../queries'
-const Authors = ({show,authors }) => {
+import BornForm from './BornForm'
+const Authors = ({show,authors, setError, token }) => {
 
   if (!show) {
     return null
@@ -26,6 +27,7 @@ const Authors = ({show,authors }) => {
           ))}
         </tbody>
       </table>
+      {token ?  <BornForm setError={setError} authors={authors} /> : null} 
     </div>
   )
 }

@@ -65,3 +65,14 @@ export const LOGIN = gql`
     }
   }
 `
+
+//i have chosen to render username, favoriteGenre and id
+export const USER = gql`
+query{
+  me {
+      username
+      favoriteGenre
+      id
+  }
+}
+`
