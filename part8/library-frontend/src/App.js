@@ -64,7 +64,7 @@ const App = () => {
 
       <Authors show={page === 'authors'} authors={authors} />
       <Notify errorMessage={errorMessage} />
-      <Books show={page === 'books'} />
+      <Books show={page === 'books'} books={books}/>
       <NewBook show={page === 'add'} setError={notify} />
       <BornForm setError={notify} authors={authors} />
     </div>
