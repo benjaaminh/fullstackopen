@@ -49,7 +49,7 @@ type Author{
     name: String!
     born: Int
     bookCount: Int!
-    id:ID!
+    id: ID!
 }
 
   type Query {
@@ -91,16 +91,16 @@ const resolvers = {
     authorCount: async () => Author.collection.countDocuments(),
     allBooks: async (root, args) => {
       if (args.author) {//allbooks with author parameter
-        return Book.find({ author: args.author })//find books with given author
+        return Book.find({ author: args.author }).populate('author')//find books with given author
       } else if (args.genre) {//allbooks with genre parameter
-        return Book.find({ genre: { $in: args.genre } })//filters by books whose genre array includes given genre
-      } else {//https://www.mongodb.com/docs/manual/reference/operator/query/in/
-        return Book.find({})
+        return Book.find({ genre: { $in: args.genre } }).populate('author')//filters by books whose genre array includes given genre
+      } else {
+        return Book.find({}).populate('author')//remember to populate
       }
 
     },
     allAuthors: async () => {
-      return Author.find({})
+      return Author.find({}).populate('books')//remember to populate so authors book objects are loaded
     },
     me: (root, args, context) => {
       return context.currentUser
@@ -108,7 +108,8 @@ const resolvers = {
   },
   Author: {
     bookCount: async (root) => {//custom resolver, to calculate bookcount
-      await Book.find({ author: root.id }).countDocuments()//find books by author id and count documents
+      const count = await Book.find({ author: root.id }).countDocuments()//find books by author id and count documents
+      return count//remember to return the value!!
     }
   },
   Mutation: {
@@ -124,11 +125,26 @@ const resolvers = {
       let author = await Author.findOne({ name: args.author })//search if author exists
       if (!author) {//if not, create new author with given args
         author = new Author({ name: args.author })
+        try {
+          await author.save(); // Save the new author
+        } catch (error) {
+          throw new GraphQLError('Creating the author failed', {
+            extensions: {
+              code: 'BAD_USER_INPUT',
+              invalidArgs: args.author,
+              error
+            }
+          })
+        }
         await author.save()//save author
       }
       const book = new Book({ ...args, author: author.id })//create new book with author id
-      return book.save()
-        .catch(error => {
+      try{
+        const savedBook = await book.save()
+        return savedBook
+
+      }
+        catch(error) {
           throw new GraphQLError('Creating the book failed', {
             extensions: {
               code: 'BAD_USER_INPUT',
@@ -136,7 +152,7 @@ const resolvers = {
               error
             }
           })
-        })
+        }
 
     },
     editAuthor: async (root, args,context) => {

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useQuery } from '@apollo/client'
 import { ALL_BOOKS } from '../queries'
-const Books = ({show}) => {
+const Books = ({show, books}) => {
   const result = useQuery(ALL_BOOKS)
   if (!show) {
     return null
@@ -11,7 +11,6 @@ const Books = ({show}) => {
     return <div>loading...</div>
   }
 
-  const books= result.data.allBooks
  
   return (
     <div>

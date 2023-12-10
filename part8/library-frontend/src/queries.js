@@ -16,6 +16,9 @@ query{
         title,
         author {
           name
+          id
+          born
+          bookCount
         }
         published,
         genres,
@@ -32,7 +35,12 @@ mutation addBook($title: String!, $author: String!, $published: Int!, $genres:[S
         genres:$genres
     ) {
         title
-        author
+        author{
+          name
+          id
+          born
+          bookCount
+        }
         published
         genres
         id
