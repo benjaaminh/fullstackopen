@@ -9,7 +9,22 @@ query {
     id
   }
 }
-`//changed all_books to return author object with name instead of just string
+`
+export const BOOKS_BY_GENRE = gql`
+query booksByGenre($genre: String){
+  allBooks(genre: $genre) {
+    title,
+    author{
+      name
+    },
+    genres,
+    published,
+    id
+  }
+}
+`
+
+//changed all_books to return author object with name instead of just string
 export const ALL_BOOKS = gql`
 query{
     allBooks {

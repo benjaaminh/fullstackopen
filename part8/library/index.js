@@ -93,7 +93,7 @@ const resolvers = {
       if (args.author) {//allbooks with author parameter
         return Book.find({ author: args.author }).populate('author')//find books with given author
       } else if (args.genre) {//allbooks with genre parameter
-        return Book.find({ genre: { $in: args.genre } }).populate('author')//filters by books whose genre array includes given genre
+        return Book.find({ genres: args.genre }).populate('author')//filters by books whose genre array includes given genre
       } else {
         return Book.find({}).populate('author')//remember to populate, this fixed loading data problem
       }
