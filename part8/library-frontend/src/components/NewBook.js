@@ -14,6 +14,13 @@ const NewBook = ({show, setError}) => {
     onError: (error) => {
       const messages = error.graphQLErrors.map(e=>e.message).join('\n')
       setError(messages)
+    },
+    update: (cache, response)=> {
+      cache.updateQuery({query:ALL_BOOKS}, ({allBooks}) => {
+        return {
+          allBooks: allBooks.concat(response.data.addBook)
+        }
+      })
     }
   }
   )

@@ -124,8 +124,8 @@ const resolvers = {
       }
       let author = await Author.findOne({ name: args.author })//search if author exists
       if (!author) {//if not, create new author with given args
-        author = new Author({ name: args.author })
         try {
+          author = new Author({ name: args.author })
           await author.save(); // Save the new author
         } catch (error) {
           throw new GraphQLError('Creating the author failed', {
@@ -136,9 +136,8 @@ const resolvers = {
             }
           })
         }
-        await author.save()//save author
       }
-      const book = new Book({ ...args, author: author.id })//create new book with author id
+      const book = new Book({ ...args, author })//create new book with author we just created
       try {
         const savedBook = await book.save()
         return savedBook
