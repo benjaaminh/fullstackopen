@@ -23,7 +23,17 @@ query booksByGenre($genre: String){
   }
 }
 `
-
+const BOOK_DETAILS = gql`
+  fragment BookDetails on Book {
+    title
+    author{
+      name
+    }
+    genres 
+    published
+    id
+  }
+`
 //changed all_books to return author object with name instead of just string
 export const ALL_BOOKS = gql`
 query{
@@ -90,4 +100,13 @@ query{
       id
   }
 }
+`
+
+export const BOOK_ADDED = gql`
+  subscription {
+    bookAdded {
+      ...BookDetails
+    }
+  }
+  ${BOOK_DETAILS}
 `

@@ -34,7 +34,7 @@ mongoose.connect(MONGODB_URI)
   .catch((error) => {
     console.log('error connection to MongoDB:', error.message)
   })
-
+mongoose.set('debug',true)
 const start = async () => {//using async so server can start before we listen to port. this allows the function to wait for server to start
   const app = express()
   const httpServer = http.createServer(app)

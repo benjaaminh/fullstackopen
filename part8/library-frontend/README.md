@@ -1,4 +1,5 @@
 problems:
-author null when adding a book
-refreshing when logged in causes log out (cookie in local storage problem?)
-graphql query to get books by genre
+possibly need to do the fix provided in subscriptions on client with updatecache:>? not sure if done yet.
+
+n+1 problem is still broken
+
