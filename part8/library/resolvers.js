@@ -20,7 +20,6 @@ const resolvers = {
   
       },
       allAuthors: async () => {
-        console.log('Author.find')
         return Author.find({}).populate('books')//remember to populate so authors book objects are loaded
       },
       me: (root, args, context) => {
@@ -29,10 +28,8 @@ const resolvers = {
     },
     Author: {
       bookCount: async (root) => {//custom resolver, to calculate bookcount
-        const count = await Book.find({ author: root.id })//find books by author id and count documents
-        const length = count.length
-        console.log("book.find")
-        return length//remember to return the value, this fixed non nullable problem
+        const count = await Book.find({ author: root.id }).countDocuments()//find books by author id and count documents
+        return count//remember to return the value, this fixed non nullable problem
       }
     },
     Mutation: {
