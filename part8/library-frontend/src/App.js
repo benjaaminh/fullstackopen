@@ -2,12 +2,31 @@ import { useState } from 'react'
 import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
-import { useApolloClient, useQuery } from '@apollo/client'
-import { ALL_AUTHORS, ALL_BOOKS } from './queries'
+import { useApolloClient, useQuery, useSubscription } from '@apollo/client'
+import { ALL_AUTHORS, ALL_BOOKS, BOOK_ADDED } from './queries'
 import Notify from './components/Notify'
-import BornForm from './components/BornForm'
 import LoginForm from './components/LoginForm'
 import Recommended from './components/Recommended'
+
+// function that takes care of manipulating cache for frontend
+export const updateCache = (cache, query, addedBook) => {
+  // helper that is used to eliminate saving same book twice
+  const uniqByTitle = (a) => {//to make books unique by title
+    let seen = new Set()
+    return a.filter((item) => {
+      let k = item.title
+      return seen.has(k) ? false : seen.add(k)// if seen, make false, otherwise add
+    })
+  }
+
+  cache.updateQuery(query, ({ allBooks }) => {
+    return {
+      allBooks: uniqByTitle(allBooks.concat(addedBook)),
+    }
+  })
+}
+
+
 const App = () => {
   const [token, setToken] = useState(null)
   const result = useQuery(ALL_AUTHORS)
@@ -15,6 +34,17 @@ const App = () => {
   const [page, setPage] = useState('authors')
   const [errorMessage, setErrorMessage] = useState(null)
   const client = useApolloClient()
+
+  useSubscription(BOOK_ADDED, {//subscription for client
+    onData: ({ data, client }) => {
+      const addedBook = data.data.bookAdded
+      notify(`${addedBook.title} added`)
+
+      updateCache(client.cache, { query: ALL_BOOKS }, addedBook)
+
+    }
+  })
+
   if (result.loading||bookresult.loading) {
     return <div>loading...</div>
   }
