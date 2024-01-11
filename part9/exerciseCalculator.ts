@@ -8,7 +8,7 @@ interface Result {
     average: number;
 }
 
-const calculateExercises = (target: number, dailyHours: number[]): Result => {
+export const calculateExercises = (target: number, dailyHours: number[]): Result => {
     const periodLength = dailyHours.length;
     const daysTrained: number = dailyHours.filter(i => i > 0).length;
     const sum: number = dailyHours.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
@@ -45,7 +45,7 @@ interface targetAndWeek {
 const parseArguments = (args: string[]): targetAndWeek => {
     if (args.length < 4) throw new Error('Not enough arguments');
     let target: number;
-    let week: number[] = [];
+    const week: number[] = [];
     if (!isNaN(Number(args[2]))) {
         target = Number(args[2]);
     }
