@@ -5,28 +5,27 @@ import NewBook from './components/NewBook'
 import { useApolloClient, useQuery, useSubscription } from '@apollo/client'
 import { ALL_AUTHORS, ALL_BOOKS, BOOK_ADDED } from './queries'
 import Notify from './components/Notify'
-import BornForm from './components/BornForm'
 import LoginForm from './components/LoginForm'
 import Recommended from './components/Recommended'
-//this causes some problems currently
-// function that takes care of manipulating cache
+
+// function that takes care of manipulating cache for frontend
 export const updateCache = (cache, query, addedBook) => {
-  // helper that is used to eliminate saving same person twice
-  const uniqByTitle = (a) => {
-    let seen = new Set()//create new set for object
+  // helper that is used to eliminate saving same book twice
+  const uniqByTitle = (a) => {//to make books unique by title
+    let seen = new Set()
     return a.filter((item) => {
-      let k = item.name
-      return seen.has(k) ? false : seen.add(k)//if set includes object, change it to false, else add the object
+      let k = item.title
+      return seen.has(k) ? false : seen.add(k)// if seen, make false, otherwise add
     })
   }
 
-
   cache.updateQuery(query, ({ allBooks }) => {
     return {
-      allBooks: uniqByTitle(allBooks.concat(addedBook)),//add the uniqbyname before adding person to all persons
+      allBooks: uniqByTitle(allBooks.concat(addedBook)),
     }
   })
 }
+
 
 const App = () => {
   const [token, setToken] = useState(null)
@@ -36,15 +35,17 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState(null)
   const client = useApolloClient()
 
-  useSubscription(BOOK_ADDED, {
+  useSubscription(BOOK_ADDED, {//subscription for client
     onData: ({ data, client }) => {
       const addedBook = data.data.bookAdded
       notify(`${addedBook.title} added`)
-      updateCache(client.cache, {query: ALL_BOOKS}, addedBook)
-      
+
+      updateCache(client.cache, { query: ALL_BOOKS }, addedBook)
+
     }
   })
-  if (result.loading || bookresult.loading) {
+
+  if (result.loading||bookresult.loading) {
     return <div>loading...</div>
   }
 
@@ -52,7 +53,7 @@ const App = () => {
     console.error('Error fetching data:', result.error || bookresult.error);
     return <div>Error fetching data</div>;
   }
-  const books = bookresult.data.allBooks
+  const books= bookresult.data.allBooks
   const authors = result.data.allAuthors//get authors from query
 
   const notify = (message) => {
@@ -92,11 +93,13 @@ const App = () => {
 
       </div>
 
-      <Authors show={page === 'authors'} authors={authors} setError={notify} token={token} />
+      <Authors show={page === 'authors'} authors={authors} setError={notify} token={token}/>
       <Notify errorMessage={errorMessage} />
-      <Books show={page === 'books'} books={books} />
+      <Books show={page === 'books'} books={books}/>
       <NewBook show={page === 'add'} setError={notify} />
-      <Recommended show={page === 'recommend'} books={books} />
+      <Recommended show={page === 'recommend'} books={books}/>
+     
+      
     </div>
   )
 }

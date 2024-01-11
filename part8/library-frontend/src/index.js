@@ -9,7 +9,9 @@ import { createClient } from 'graphql-ws'
 const httpLink = createHttpLink({
   uri: 'http://localhost:4000',
 })
-
+const wsLink = new GraphQLWsLink(//web socket link- for subscriptions to client
+  createClient({ url: 'ws://localhost:4000' })
+)
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem('library-user-token')
   return {
@@ -19,16 +21,11 @@ const authLink = setContext((_, { headers }) => {
     }
   }
 })
-
-const wsLink = new GraphQLWsLink(//websocket connection for subscriptions
-  createClient({url: 'ws://localhost:4000'})
-)
-
-const splitLink = split(//split the links into one
-  ({query})=>{
+const splitLink = split(//split both links to use them both in apolloclient
+  ({ query }) => {
     const definition = getMainDefinition(query)
     return (
-      definition.kind=== 'OperationDefinition' &&
+      definition.kind === 'OperationDefinition' &&
       definition.operation === 'subscription'
     )
   },
@@ -36,8 +33,9 @@ const splitLink = split(//split the links into one
   authLink.concat(httpLink)
 )
 
+
 const client = new ApolloClient({
-    link: splitLink, 
+    link: splitLink, //remember to run server!!, node index.js in abolloserver directory
     cache: new InMemoryCache(),
   })
 

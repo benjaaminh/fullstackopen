@@ -34,6 +34,7 @@ const BOOK_DETAILS = gql`
     id
   }
 `
+
 //changed all_books to return author object with name instead of just string
 export const ALL_BOOKS = gql`
 query{

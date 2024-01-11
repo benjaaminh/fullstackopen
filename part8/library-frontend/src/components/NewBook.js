@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { ADD_BOOK, ALL_AUTHORS, ALL_BOOKS } from '../queries'
 import { useMutation } from '@apollo/client'
 import { updateCache } from '../App'
+
 const NewBook = ({show, setError}) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
@@ -10,14 +11,13 @@ const NewBook = ({show, setError}) => {
   const [genres, setGenres] = useState([])
 
   const [addBook] = useMutation(ADD_BOOK,{
-    refetchQueries: [{query: ALL_AUTHORS}],//dont need to refetch all books, when its done by updatecache
+    refetchQueries: [{query: ALL_AUTHORS}, {query: ALL_BOOKS}],
     onError: (error) => {
       const messages = error.graphQLErrors.map(e=>e.message).join('\n')
       setError(messages)
     },
     update: (cache, response)=> {
-      updateCache(cache, {query: ALL_BOOKS},
-        response.data.addBook)
+      updateCache(cache,{query:ALL_BOOKS}, response.data.addBook)//using updatecache function from App
     }
   }
   )
