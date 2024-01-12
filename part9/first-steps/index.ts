@@ -34,7 +34,7 @@ app.post('/exercises', (req, res) => {
   return res.send({ result });
 });
 
-const PORT = 3002;
+const PORT = 3003;
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

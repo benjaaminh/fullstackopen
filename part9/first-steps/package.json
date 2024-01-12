@@ -1,14 +1,15 @@
 {
-  "name": "patientor-backend",
+  "name": "first-steps",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "tsc": "tsc",
+    "start": "ts-node index.ts",
+    "ts-node": "ts-node",
+    "calculateBmi": "ts-node bmiCalculator.ts",
+    "calculateExercises": "ts-node exerciseCalculator.ts",
     "dev": "ts-node-dev index.ts",
-    "lint": "eslint --ext .ts .",
-    "start": "node build/index.js"
+    "lint": "eslint --ext .ts ."
   },
   "author": "",
   "license": "ISC",
