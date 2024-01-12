@@ -1,23 +1,22 @@
 {
-  "name": "part9",
+  "name": "patientor-backend",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "calculateBmi": "ts-node bmiCalculator.ts",
-    "calculateExercises": "ts-node exerciseCalculator.ts",
-    "start": "ts-node index.ts",
+    "tsc": "tsc",
     "dev": "ts-node-dev index.ts",
-    "lint": "eslint --ext .ts ."
+    "lint": "eslint --ext .ts .",
+    "start": "node build/index.js"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/express": "^4.17.21",
     "@typescript-eslint/eslint-plugin": "^6.18.1",
     "@typescript-eslint/parser": "^6.18.1",
     "eslint": "^8.56.0",
-    "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.3.3"
   },
