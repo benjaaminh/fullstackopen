@@ -11,7 +11,8 @@ const toNewPatient = (object: unknown): NewPatient => {
         dateOfBirth: parseDOB(object.dateOfBirth),
         gender: parseGender(object.gender),
         occupation: parseOccupation(object.occupation),
-        ssn: parseSSN(object.ssn)
+        ssn: parseSSN(object.ssn),
+        entries: []//entries is just an empty array on creation
       };
   
       return newPatient;
