@@ -4,15 +4,15 @@ import toNewPatient from '../utils';
 const router = express.Router();
 
 router.get('/', (_req, res) => {
-    res.send(patientService.getPatientsWithoutSSN());
+    res.send(patientService.getPatients());//to get ssn when viewing single patient
 });
 
 router.get('/:id',(req,res)=> {
     const patient = patientService.findById(req.params.id);
     if (patient){
-        res.send(patient)
+        res.send(patient);
     }else{
-        res.sendStatus(404)
+        res.sendStatus(404);
     }
 });
 

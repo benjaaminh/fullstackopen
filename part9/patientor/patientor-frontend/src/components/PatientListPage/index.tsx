@@ -1,7 +1,16 @@
 import { useState } from "react";
 import { Box, Table, Button, TableHead, Typography, TableCell, TableRow, TableBody } from '@mui/material';
 import axios from 'axios';
-
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link,
+  Navigate,
+  useParams,
+  useNavigate,
+  useMatch
+} from "react-router-dom";
 import { PatientFormValues, Patient } from "../../types";
 import AddPatientModal from "../AddPatientModal";
 
@@ -10,11 +19,11 @@ import HealthRatingBar from "../HealthRatingBar";
 import patientService from "../../services/patients";
 
 interface Props {
-  patients : Patient[]
+  patients: Patient[]
   setPatients: React.Dispatch<React.SetStateAction<Patient[]>>
 }
 
-const PatientListPage = ({ patients, setPatients } : Props ) => {
+const PatientListPage = ({ patients, setPatients }: Props) => {
 
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [error, setError] = useState<string>();
@@ -66,7 +75,9 @@ const PatientListPage = ({ patients, setPatients } : Props ) => {
         <TableBody>
           {Object.values(patients).map((patient: Patient) => (
             <TableRow key={patient.id}>
-              <TableCell>{patient.name}</TableCell>
+              <TableCell>
+                <Link to={`/patients/${patient.id}`}>{patient.name}</Link>{/*link to patient page from name*/}
+              </TableCell>
               <TableCell>{patient.gender}</TableCell>
               <TableCell>{patient.occupation}</TableCell>
               <TableCell>
