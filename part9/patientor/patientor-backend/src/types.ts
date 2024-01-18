@@ -56,7 +56,6 @@ interface OccupationalHealthcareEntry extends BaseEntry {
 
 interface HospitalEntry extends BaseEntry {
     type: "Hospital";
-    specialist: string;
     discharge: Discharge;
 }
 
@@ -74,6 +73,6 @@ export type PatientWithoutSSN = Omit<Patient, 'ssn'>;//patient without ssn inclu
 export type NewPatient = Omit<Patient, 'id'>;//patient without id, since uuid generates it for us
 
 // Define special omit for unions
-//type UnionOmit<T, K extends string | number | symbol> = T extends unknown ? Omit<T, K> : never;
-// Define Entry without the 'id' property
-//type EntryWithoutId = UnionOmit<Entry, 'id'>;
+type UnionOmit<T, K extends string | number | symbol> = T extends unknown ? Omit<T, K> : never;
+// Define Entry without the 'id' property, e.g new entry
+export type NewEntry = UnionOmit<Entry, 'id'>;

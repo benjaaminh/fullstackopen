@@ -1,4 +1,4 @@
-import { Entry, HealthCheckRating } from "../../types";
+import { Entry, HealthCheckRating, Diagnosis } from "../../types";
 import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import WorkIcon from '@mui/icons-material/Work';
@@ -12,9 +12,61 @@ const assertNever = (value: never): never => {
     );
 };
 
+interface Props {
+    entry: Entry;
+    diagnoses: Diagnosis[];
+}
+
+const entryStyle = {
+    paddingTop: 10,
+    paddingLeft: 2,
+    border: 'solid',
+    borderWidth: 0.7,
+    marginBottom: 5,
+    borderRadius: 10,
+}
+
+
 
 //renders part data depending on kind of part
-const EntryDetails = ({ entry }: { entry: Entry }) => {//prop is part and of object coursepart
+const EntryDetails = ({ entry, diagnoses }: Props) => {
+    const findDiagnosis = (code: string) => {//function to find diagnosis based on code parameter
+        const diagnose = diagnoses.find(d => d.code === code)
+        return diagnose?.name
+    }
+
+    const BaseDetails = ({ entry }: { entry: Entry }) => {
+        const IconByType = (entry: Entry) => {
+            switch (entry.type) {
+                case "HealthCheck":
+                    return (
+                        <MedicalServicesIcon />
+                    )
+                case "OccupationalHealthcare":
+                    return (
+                        <div style={{display:"inline-block"}}><WorkIcon /> {entry.employerName}</div>
+                    /*inline block so divs stay on same line*/
+                        )
+                case "Hospital":
+                    return (
+                        <LocalHospitalIcon />
+                    )
+            }
+        }
+        return (
+            <div>
+                <p>{entry.date} {IconByType(entry)}</p>
+                <em>{entry.description}</em>
+                <ul>
+                    {entry.diagnosisCodes?.map(code => (//map diagnosiscodes (if they exist) from entries (nested mapping)
+                        <li>{code} {findDiagnosis(code = code)} {/*renders diagnosis name from code*/}</li>
+                    ))}
+                </ul>
+                <p>diagnose by {entry.specialist}</p>
+            </div>
+        )
+    }
+
     switch (entry.type) {
         case "HealthCheck":
             const heartByHealth = (healthCheckRating: HealthCheckRating) => {
@@ -29,27 +81,20 @@ const EntryDetails = ({ entry }: { entry: Entry }) => {//prop is part and of obj
                 }
             }
             return (
-                <div>
-                    <p>{entry.date}<MedicalServicesIcon /></p>
-                    <em>{entry.description}</em>
-                    <p>{heartByHealth(entry.healthCheckRating)}</p>
-                    <p>diagnose by {entry.specialist}</p>
+                <div style={entryStyle}>
+                    <BaseDetails entry={entry} />
+                    <p>health status: {heartByHealth(entry.healthCheckRating)}</p>
                 </div>
             );
-        case "OccupationalHealthcare"://if group, render project exercises etc..
+        case "OccupationalHealthcare":
             return (
-                <div>
-                    <p>{entry.date}<WorkIcon /> <em>{entry.employerName}</em></p>
-                    <em>{entry.description}</em>
-                    <p>diagnose by {entry.specialist}</p>
+                <div style={entryStyle}>
+                    <BaseDetails entry={entry} />
                 </div>
             );
         case "Hospital":
-            return (<div>
-                <p>{entry.date}<LocalHospitalIcon /></p>
-                <em>{entry.description}</em>
-                <p></p>
-                <p>diagnose by {entry.specialist}</p>
+            return (<div style={entryStyle}>
+                <BaseDetails entry={entry}/>
             </div>
             );
 

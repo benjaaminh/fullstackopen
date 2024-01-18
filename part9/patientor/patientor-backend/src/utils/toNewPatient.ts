@@ -1,5 +1,5 @@
-import { NewPatient } from './types';
-import { Gender } from './types';
+import { NewPatient } from '../types';
+import { Gender } from '../types';
 const toNewPatient = (object: unknown): NewPatient => {
     if ( !object || typeof object !== 'object' ) {//type guard that checks that object exists and is of type object
       throw new Error('Incorrect or missing data');
