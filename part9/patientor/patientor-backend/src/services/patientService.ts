@@ -25,11 +25,11 @@ const addEntry = (
   const newEntry={
     id:id,
     ...entry
-  }
+  };
   patient.entries.push(newEntry);
   return newEntry;
   
-}
+};
 
 const addPatient = (
   patient: NewPatient//patient consists of every field except id (newpatient type)

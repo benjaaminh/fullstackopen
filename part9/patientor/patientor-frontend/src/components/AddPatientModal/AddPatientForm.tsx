@@ -23,13 +23,13 @@ const AddPatientForm = ({ onCancel, onSubmit }: Props) => {
   const [occupation, setOccupation] = useState('');
   const [ssn, setSsn] = useState('');
   const [dateOfBirth, setDateOfBirth] = useState('');
-  const [gender, setGender] = useState(Gender.Other);
+  const [gender, setGender] = useState(Gender.Other);//default state is just other
 
   const onGenderChange = (event: SelectChangeEvent<string>) => {
     event.preventDefault();
-    if ( typeof event.target.value === "string") {
+    if ( typeof event.target.value === "string") {//of string type
       const value = event.target.value;
-      const gender = Object.values(Gender).find(g => g.toString() === value);
+      const gender = Object.values(Gender).find(g => g.toString() === value);//check if match, values should be of string
       if (gender) {
         setGender(gender);
       }

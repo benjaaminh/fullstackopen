@@ -1,7 +1,8 @@
 import axios from "axios";
 import { Entry, NewEntry, Patient, PatientFormValues } from "../types";
-
 import { apiBaseUrl } from "../constants";
+
+//functions for creating and getting patients and their entries
 
 const getAll = async () => {
   const { data } = await axios.get<Patient[]>(
@@ -27,7 +28,7 @@ const createEntry = async (object: NewEntry, id: string)=>{
   );
 
   return data;
-}
+};
 
 export default {
   getAll, create, createEntry

@@ -61,7 +61,7 @@ const toNewEntry = (object: unknown): NewEntry => {
     }
 
     throw new Error('Incorrect data: some fields are missing');
-}
+};
 const parseDiagnosisCodes = (object: unknown): Array<Diagnosis['code']> =>  {
     if (!object || typeof object !== 'object' || !('diagnosisCodes' in object)) {
       // we will just trust the data to be in correct form
@@ -141,7 +141,7 @@ const parseSickLeave = (sickLeave: unknown): SickLeave => {
     };
     return newSickLeave;
 
-}
+};
 
 const parseDischarge = (discharge: unknown): Discharge => {
     if (!discharge || typeof discharge !== 'object' || !("date" in discharge) || !("criteria" in discharge)) {//sick leave is an interface
@@ -153,6 +153,6 @@ const parseDischarge = (discharge: unknown): Discharge => {
     };
     return newDischarge;
 
-}
+};
 
 export default toNewEntry;

@@ -24,16 +24,16 @@ const entryStyle = {
     borderWidth: 0.7,
     marginBottom: 5,
     borderRadius: 10,
-}
+};
 
 
 
 //renders part data depending on kind of part
 const EntryDetails = ({ entry, diagnoses }: Props) => {
     const findDiagnosis = (code: string) => {//function to find diagnosis based on code parameter
-        const diagnose = diagnoses.find(d => d.code === code)
-        return diagnose?.name
-    }
+        const diagnose = diagnoses.find(d => d.code === code);
+        return diagnose?.name;
+    };
 
     const BaseDetails = ({ entry }: { entry: Entry }) => {
         const IconByType = (entry: Entry) => {
@@ -41,45 +41,46 @@ const EntryDetails = ({ entry, diagnoses }: Props) => {
                 case "HealthCheck":
                     return (
                         <MedicalServicesIcon />
-                    )
+                    );
                 case "OccupationalHealthcare":
                     return (
-                        <div style={{display:"inline-block"}}><WorkIcon /> {entry.employerName}</div>
-                    /*inline block so divs stay on same line*/
-                        )
+                        <div style={{ display: "inline-block" }}><WorkIcon /> {entry.employerName}</div>
+                        /*inline block so divs stay on same line*/
+                    );
                 case "Hospital":
                     return (
                         <LocalHospitalIcon />
-                    )
+                    );
             }
-        }
+        };
         return (
             <div>
-                <p>{entry.date} {IconByType(entry)}</p>
+                <div>{entry.date} {IconByType(entry)}</div>
                 <em>{entry.description}</em>
                 <ul>
                     {entry.diagnosisCodes?.map(code => (//map diagnosiscodes (if they exist) from entries (nested mapping)
-                        <li>{code} {findDiagnosis(code = code)} {/*renders diagnosis name from code*/}</li>
+                        <li key={code}>{code} {findDiagnosis(code)} {/*renders diagnosis name from code*/}</li>
                     ))}
                 </ul>
                 <p>diagnose by {entry.specialist}</p>
             </div>
-        )
-    }
+        );
+    };
 
+    //depending on entry type, render it
     switch (entry.type) {
         case "HealthCheck":
             const heartByHealth = (healthCheckRating: HealthCheckRating) => {
                 if (healthCheckRating.toString() == "0") {
-                    return <FavoriteIcon sx={{ color: "green" }} />
+                    return <FavoriteIcon sx={{ color: "green" }} />;
                 } else if (healthCheckRating.toString() == "1") {
-                    return <FavoriteIcon sx={{ color: "yellow" }} />
+                    return <FavoriteIcon sx={{ color: "yellow" }} />;
                 } else if (healthCheckRating.toString() == "2") {
-                    return <FavoriteIcon sx={{ color: "red" }} />
+                    return <FavoriteIcon sx={{ color: "red" }} />;
                 } else {
-                    return <FavoriteIcon />
+                    return <FavoriteIcon />;
                 }
-            }
+            };
             return (
                 <div style={entryStyle}>
                     <BaseDetails entry={entry} />
@@ -94,7 +95,7 @@ const EntryDetails = ({ entry, diagnoses }: Props) => {
             );
         case "Hospital":
             return (<div style={entryStyle}>
-                <BaseDetails entry={entry}/>
+                <BaseDetails entry={entry} />
             </div>
             );
 

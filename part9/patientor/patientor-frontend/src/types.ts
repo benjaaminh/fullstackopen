@@ -10,6 +10,12 @@ export enum Gender {
   Other = "other"
 }
 
+export enum Types {
+  HealthCheck= "Health check",
+  OccupationalHealthcare="Occupational healthcare",
+  Hospital="Hospital"
+}
+
 export interface Patient {
   id: string;
   name: string;
@@ -57,7 +63,6 @@ interface OccupationalHealthcareEntry extends BaseEntry {
 
 interface HospitalEntry extends BaseEntry {
   type: "Hospital";
-  specialist: string;
   discharge: Discharge;
 }
 

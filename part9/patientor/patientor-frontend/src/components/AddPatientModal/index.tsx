@@ -9,7 +9,7 @@ interface Props {
   onSubmit: (values: PatientFormValues) => void;
   error?: string;
 }
-
+//opens up a new window (modal) when adding patient
 const AddPatientModal = ({ modalOpen, onClose, onSubmit, error }: Props) => (
   <Dialog fullWidth={true} open={modalOpen} onClose={() => onClose()}>
     <DialogTitle>Add a new patient</DialogTitle>
